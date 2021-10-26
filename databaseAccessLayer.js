@@ -13,10 +13,12 @@ const getAllUsers = (callback) => {
     });
 };
 
-const getUserById = (userId, callback) => {
-    const id = parseInt(userId);
-    let sqlQuery = 'SELECT * FROM users WHERE id = $1';
-    database.query(sqlQuery, [id], (err, result) => {
+const getUserById = (postData, callback) => {
+    let sqlQuery = 'SELECT * FROM users WHERE id = :id';
+    let params = {
+        id: postData.id,
+    };
+    database.query(sqlQuery, params, (err, result) => {
         if (err) {
             callback(err, null);
         }
@@ -66,11 +68,16 @@ const addUser = (postData, callback) => {
     });
 };
 
-const updateUser = (req, callback) => {
-    const id = parseInt(req.query.id);
-    const { name, email } = req.body;
-    let sqlUpdateUser = 'DELETE FROM users WHERE web_user_id = :userID';
-    database.query(sqlUpdateUser, [name, email, id], (err, result) => {
+const updateUser = (postData, callback) => {
+    let sqlUpdateUser =
+        'UPDATE users SET first_name = :first_name, last_name = :last_name, email = :email WHERE id = :id';
+    let params = {
+        id: postData.id,
+        first_name: postData.first_name,
+        last_name: postData.last_name,
+        email: postData.email,
+    };
+    database.query(sqlUpdateUser, params, (err, result) => {
         if (err) {
             callback(err, null);
         }
