@@ -1,6 +1,6 @@
 const database = include('/databaseConnection');
 
-function getAllUsers(callback) {
+const getAllUsers = (callback) => {
     let sqlQuery =
         'SELECT web_user_id, first_name, last_name, email FROM users';
     database.query(sqlQuery, (err, results, fields) => {
@@ -11,10 +11,22 @@ function getAllUsers(callback) {
             callback(null, results);
         }
     });
-}
+};
+
+const getUserById = (userId, callback) => {
+    const id = parseInt(userId);
+    let sqlQuery = 'SELECT * FROM users WHERE id = $1';
+    database.query(sqlQuery, [id], (err, result) => {
+        if (err) {
+            callback(err, null);
+        }
+        console.log(results);
+        callback(null, result);
+    });
+};
 
 const passwordPepper = 'SeCretPeppa4MySal+';
-function addUser(postData, callback) {
+const addUser = (postData, callback) => {
     let sqlInsertSalt =
         'INSERT INTO users (first_name, last_name, email, password_salt)VALUES (:first_name, :last_name, :email, sha2(UUID(),512));';
     let params = {
@@ -52,9 +64,21 @@ function addUser(postData, callback) {
             );
         }
     });
-}
+};
 
-function deleteUser(webUserId, callback) {
+const updateUser = (req, callback) => {
+    const id = parseInt(req.query.id);
+    const { name, email } = req.body;
+    let sqlUpdateUser = 'DELETE FROM users WHERE web_user_id = :userID';
+    database.query(sqlUpdateUser, [name, email, id], (err, result) => {
+        if (err) {
+            callback(err, null);
+        }
+        callback(null, result);
+    });
+};
+
+const deleteUser = (webUserId, callback) => {
     let sqlDeleteUser = 'DELETE FROM users WHERE web_user_id = :userID';
     let params = { userID: webUserId };
     console.log(sqlDeleteUser);
@@ -66,10 +90,12 @@ function deleteUser(webUserId, callback) {
             callback(null, results);
         }
     });
-}
+};
 
 module.exports = {
     getAllUsers,
+    getUserById,
     addUser,
+    updateUser,
     deleteUser,
 };
