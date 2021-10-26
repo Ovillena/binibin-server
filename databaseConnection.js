@@ -22,8 +22,6 @@ const pgHerokuPool = new Pool({
 if (is_heroku) {
   var database = pgHerokuPool;
 } else {
-  //   var database = mysql.createPool(dbConfigLocal);
-  // var database = pgPool;
   var database = pgPool;
 }
 
