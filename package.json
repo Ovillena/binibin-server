@@ -1,8 +1,8 @@
 {
     "name": "binibin-server",
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "description": "Server for the BiniBin webapp.",
+    "main": "server.js",
     "scripts": {
         "start": "node server.js",
         "server": "nodemon server.js"
