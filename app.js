@@ -8,22 +8,23 @@ global.include = function (file) {
 };
 
 const express = require('express');
-const database = include('databaseConnection');
-const router = include('routes/router');
+// const database = include('databaseConnection');
+const router = include('routes');
 
-const port = process.env.PORT || 3000;
+// const port = process.env.PORT || 3000;
 
-database.connect((err, dbConnection) => {
-    if (!err) {
-        console.log('Successfully connected to PostgreSQL');
-    } else {
-        console.log('Error Connecting to PostgreSQL');
-        console.log(err);
-    }
-});
+// database.connect((err, dbConnection) => {
+//     if (!err) {
+//         console.log('Successfully connected to PostgreSQL');
+//     } else {
+//         console.log('Error Connecting to PostgreSQL');
+//         console.log(err);
+//     }
+// });
 
 const app = express();
 
+// mounts all indiv routers to main app
 app.use('/api', router);
 
 app.listen(port, () => {
