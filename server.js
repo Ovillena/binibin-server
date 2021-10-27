@@ -7,25 +7,36 @@ global.include = function (file) {
     return require(abs_path('/' + file));
 };
 
-const express = require('express');
-const database = include('databaseConnection');
-const router = include('routes/router');
+const database = include('./models/databaseConnection');
 
-const port = process.env.PORT || 3000;
+process.on('uncaughtException', (err) => {
+    console.log('UNCAUGHT EXCEPTION!!! shutting down...');
+    console.log(err);
+    process.exit(1);
+});
 
+const app = require('./app');
+
+// Connect the database
 database.connect((err, dbConnection) => {
-    if (!err) {
-        console.log('Successfully connected to PostgreSQL');
-    } else {
+    if (err) {
         console.log('Error Connecting to PostgreSQL');
         console.log(err);
+    } else {
+        console.log('Successfully connected to PostgreSQL');
     }
 });
 
-const app = express();
-
-app.use('/api', router);
-
+// Start the server
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log('Node application listening on port ' + port);
+    console.log(`Application is running on port ${port}`);
+});
+
+process.on('unhandledRejection', (err) => {
+    console.log('UNHANDLED REJECTION!!!  shutting down ...');
+    console.log(err);
+    server.close(() => {
+        process.exit(1);
+    });
 });

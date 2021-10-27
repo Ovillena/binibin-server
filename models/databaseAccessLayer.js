@@ -1,4 +1,4 @@
-const database = include('/databaseConnection');
+const database = include('models/databaseConnection');
 
 const getAllAdminUsers = (callback) => {
     let sqlQuery =
