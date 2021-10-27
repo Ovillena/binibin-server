@@ -1,8 +1,8 @@
 const database = include('/databaseConnection');
 
-const getAllUsers = (callback) => {
+const getAllAdminUsers = (callback) => {
     let sqlQuery =
-        'SELECT web_user_id, first_name, last_name, email FROM users';
+        'SELECT admin_account_id, username, email FROM admin_accounts';
     database.query(sqlQuery, (err, results, fields) => {
         if (err) {
             callback(err, null);
@@ -13,8 +13,8 @@ const getAllUsers = (callback) => {
     });
 };
 
-const getUserById = (postData, callback) => {
-    let sqlQuery = 'SELECT * FROM users WHERE id = :id';
+const getAdminUserById = (postData, callback) => {
+    let sqlQuery = 'SELECT * FROM admin_accounts WHERE id = :id';
     let params = {
         id: postData.id,
     };
@@ -100,8 +100,8 @@ const deleteUser = (webUserId, callback) => {
 };
 
 module.exports = {
-    getAllUsers,
-    getUserById,
+    getAllAdminUsers,
+    getAdminUserById,
     addUser,
     updateUser,
     deleteUser,

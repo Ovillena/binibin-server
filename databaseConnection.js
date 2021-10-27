@@ -22,7 +22,8 @@ const pgHerokuPool = new Pool({
 if (is_heroku) {
     var database = pgHerokuPool;
 } else {
-    var database = pgPool;
+    // var database = pgPool;
+    var database = pgHerokuPool;
 }
 
 module.exports = database;
