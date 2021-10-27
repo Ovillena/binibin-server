@@ -1,9 +1,8 @@
-const users = require('./user');
-// recyclables? items?
-const items = require('./items');
+const express = require('express');
+const router = express.Router();
 
-module.exports = (app) => {
-    app.use('/users', users);
-    app.use('/items', items);
-    // etc..
-};
+router.get('/', (req, res) => {
+    res.redirect('/api');
+});
+
+module.exports = router;

@@ -1,32 +1,28 @@
-//Define the include function for absolute file name
-global.base_dir = __dirname;
-global.abs_path = function (path) {
-    return base_dir + path;
-};
-global.include = function (file) {
-    return require(abs_path('/' + file));
-};
-
 const express = require('express');
-// const database = include('databaseConnection');
-const router = include('routes');
-
-// const port = process.env.PORT || 3000;
-
-// database.connect((err, dbConnection) => {
-//     if (!err) {
-//         console.log('Successfully connected to PostgreSQL');
-//     } else {
-//         console.log('Error Connecting to PostgreSQL');
-//         console.log(err);
-//     }
-// });
 
 const app = express();
+const globalErrHandler = require('./controllers/errorController');
+const AppError = require('./utils/appError');
 
-// mounts all indiv routers to main app
-app.use('/api', router);
+// Body parser, reading data from body into req.body
+app.use(express.json());
 
-app.listen(port, () => {
-    console.log('Node application listening on port ' + port);
+// Routes
+const indexRouter = include('routes/index');
+const usersRouter = include('routes/user');
+app.use('/api/users', usersRouter);
+app.use('/api', (req, res, next) => {
+    res.send('binibin api');
 });
+app.use('/', indexRouter);
+// app.use('/api/items', itemsRouter);
+
+// handle undefined Routes
+app.use('*', (req, res, next) => {
+    const err = new AppError(404, 'fail', 'undefined route');
+    next(err, req, res, next);
+});
+
+// app.use(globalErrHandler);
+
+module.exports = app;

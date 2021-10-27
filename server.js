@@ -1,25 +1,29 @@
+//Define the include function for absolute file name
+global.base_dir = __dirname;
+global.abs_path = function (path) {
+    return base_dir + path;
+};
+global.include = function (file) {
+    return require(abs_path('/' + file));
+};
+
 const database = include('./models/databaseConnection');
 
 process.on('uncaughtException', (err) => {
     console.log('UNCAUGHT EXCEPTION!!! shutting down...');
-    console.log(err.name, err.message);
+    console.log(err);
     process.exit(1);
 });
 
 const app = require('./app');
 
-const database = process.env.DATABASE.replace(
-    '<PASSWORD>',
-    process.env.DATABASE_PASSWORD
-);
-
 // Connect the database
 database.connect((err, dbConnection) => {
-    if (!err) {
-        console.log('Successfully connected to PostgreSQL');
-    } else {
+    if (err) {
         console.log('Error Connecting to PostgreSQL');
         console.log(err);
+    } else {
+        console.log('Successfully connected to PostgreSQL');
     }
 });
 
@@ -31,7 +35,7 @@ app.listen(port, () => {
 
 process.on('unhandledRejection', (err) => {
     console.log('UNHANDLED REJECTION!!!  shutting down ...');
-    console.log(err.name, err.message);
+    console.log(err);
     server.close(() => {
         process.exit(1);
     });
