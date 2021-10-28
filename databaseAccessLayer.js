@@ -1,5 +1,19 @@
 const database = include('/databaseConnection');
 
+const getAllAdminInfo = (callback) => {
+    let sqlQuery =
+        'SELECT username, password FROM admin_accounts';
+    database.query(sqlQuery, (err, results, fields) => {
+        if (err) {
+            callback(err, null);
+        } else {
+            console.log(results);
+            callback(null, results);
+        }
+    });
+};
+
+
 const getAllAdminUsers = (callback) => {
     let sqlQuery =
         'SELECT admin_account_id, username, email FROM admin_accounts';
@@ -105,4 +119,5 @@ module.exports = {
     addUser,
     updateUser,
     deleteUser,
+    getAllAdminInfo
 };

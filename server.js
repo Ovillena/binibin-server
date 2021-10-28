@@ -23,8 +23,14 @@ database.connect((err, dbConnection) => {
 });
 
 const app = express();
+const passport = require("./middleware/passport");
+
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/api', router);
+
 
 app.listen(port, () => {
     console.log('Node application listening on port ' + port);
