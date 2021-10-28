@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const database = include('./models/databaseConnection');
-const dbModel = include('./models/databaseAccessLayer');
+const userController = require('../controllers/userController');
 
 router.get('/', (req, res) => {
     console.log('page hit');
@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
             console.log('Error connecting to PostgreSQL');
             console.log(err);
         } else {
-            dbModel.getAllAdminUsers((err, result) => {
+            userController.getAllAdminUsers((err, result) => {
                 if (err) {
                     res.send('Error reading from PostgreSQL');
                     console.log('Error reading from PostgreSQL');

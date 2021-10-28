@@ -15,7 +15,6 @@ app.use('/api', (req, res, next) => {
     res.send('binibin api');
 });
 app.use('/', indexRouter);
-// app.use('/api/items', itemsRouter);
 
 // handle undefined Routes
 app.use('*', (req, res, next) => {
@@ -23,6 +22,6 @@ app.use('*', (req, res, next) => {
     next(err, req, res, next);
 });
 
-// app.use(globalErrHandler);
+app.use(globalErrHandler);
 
 module.exports = app;

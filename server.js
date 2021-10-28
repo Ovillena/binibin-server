@@ -7,8 +7,6 @@ global.include = function (file) {
     return require(abs_path('/' + file));
 };
 
-const database = include('./models/databaseConnection');
-
 process.on('uncaughtException', (err) => {
     console.log('UNCAUGHT EXCEPTION!!! shutting down...');
     console.log(err);
@@ -16,16 +14,6 @@ process.on('uncaughtException', (err) => {
 });
 
 const app = require('./app');
-
-// Connect the database
-database.connect((err, dbConnection) => {
-    if (err) {
-        console.log('Error Connecting to PostgreSQL');
-        console.log(err);
-    } else {
-        console.log('Successfully connected to PostgreSQL');
-    }
-});
 
 // Start the server
 const port = process.env.PORT || 3000;
