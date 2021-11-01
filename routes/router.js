@@ -1,11 +1,12 @@
 const router = require('express').Router();
 const database = include('databaseConnection');
 const dbModel = include('databaseAccessLayer');
+const { ensureAuthenticated } = require("../middleware/checkAuth")
 
 const passport = require("../middleware/passport");
 
 router.get('/sadness', (req, res) => {
-    res.send("try again")
+    res.send("sadness; try again")
 })
 
 router.get('/', (req, res) => {
@@ -41,6 +42,9 @@ router.post("/login",
     res.send("love me today")
   }
 )
+router.get("/hiddenpage", ensureAuthenticated, (req, res) => {
+    res.send("passed check. you are logged in")
+})
 router.get("/logout", (req, res) => {
     req.logout();
     res.send("you logged out")
