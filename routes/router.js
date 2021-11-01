@@ -36,21 +36,15 @@ router.get('/', (req, res) => {
 router.post("/login", 
   passport.authenticate("local", {
     failureRedirect: '/api/sadness',
-  }),
-
-  function (req, res) {
+  }), (req, res) => {
     // res.redirect("/");
-    res.send("I LOVE YOU.")
+    res.send("love me today")
   }
 )
+router.get("/logout", (req, res) => {
+    req.logout();
+    res.send("you logged out")
+})
 
-// app.post('/login', function(req, res, next) {
-//     passport.authenticate('local', function(err, user, info) {
-//         if (err) { return next(err); }
-//         if (!user) { return res.redirect('/api/sadness'); }
-    
-//     // NEED TO CALL req.login()!!!
-//         req.login(user, next);
-//     })(req, res, next);
-// });
+
 module.exports = router;

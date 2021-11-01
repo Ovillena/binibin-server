@@ -3,19 +3,41 @@ const passwordPepper = 'SeCretPeppa4MySal+';
 const crypto = require("crypto");
 
 const userModel = {
-  findOne: async(email) => {
-    let sqlQuery = 'SELECT * FROM admin_accounts WHERE email = :email';
-    let params = {
-        email: email,
-    };
-    database.query(sqlQuery, params, (err, result) => {
-        if (err) {
-            callback(err, null);
-        }
-        console.log(results);
-        callback(null, result.rows);
-    });
+  findOne: async (username) => {
+    console.log("called findOne")
+    // need to update this if we change database for user account id
+
+    let sqlQuery = 'SELECT * FROM admin_accounts WHERE username = $1';
+    let values = [username];
+    let user = await database.query(sqlQuery, values)
+      .then(user => user)
+      .catch(err => console.log(err));
+    return user;
   },
+  findById: async (id) => {
+    console.log(`called findById with param id: ${id}`)
+    // need to update this if we change database for user account id
+    let sqlQuery = `SELECT * FROM admin_accounts WHERE admin_account_id = $1`;
+    let values = [id];
+    let user = await database.query(sqlQuery, values)
+      .then (user => user)
+      .catch(err => console.log(err));
+    return user ? user : null;
+
+  },
+
+//   const getAllAdminInfo = (callback) => {
+//     let sqlQuery =
+//         'SELECT username, password FROM admin_accounts';
+//     database.query(sqlQuery, (err, results, fields) => {
+//         if (err) {
+//             callback(err, null);
+//         } else {
+//             console.log(results);
+//             callback(null, results);
+//         }
+//     });
+// };
 
   hashPassword: (password, salt) => {
     const password_hash = crypto.createHash("sha512");
