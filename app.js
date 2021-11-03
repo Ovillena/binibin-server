@@ -43,6 +43,8 @@ const usersRouter = include('routes/user');
 const authRouter = include('routes/auth')
 app.use('/api/users', usersRouter);
 app.use('/auth', authRouter);
+const entriesRouter = include('routes/entry');
+app.use('/api/entries', entriesRouter);
 app.use('/api', (req, res, next) => {
     res.send('binibin api');
 });

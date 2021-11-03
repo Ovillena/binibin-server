@@ -28,8 +28,7 @@ function isUserValid(user, password) {
 };
 
 const getAllAdminUsers = (callback) => {
-    let sqlQuery =
-        'SELECT * FROM accounts';
+    let sqlQuery = 'SELECT account_id, username, email FROM accounts';
     database.query(sqlQuery, (err, results, fields) => {
         if (err) {
             callback(err, null);
@@ -41,7 +40,7 @@ const getAllAdminUsers = (callback) => {
 };
 
 const getAdminUserById = (postData, callback) => {
-    let sqlQuery = 'SELECT * FROM admin_accounts WHERE id = :id';
+    let sqlQuery = 'SELECT * FROM accounts WHERE id = :id';
     let params = {
         id: postData.id,
     };
