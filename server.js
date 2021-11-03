@@ -10,8 +10,9 @@ global.include = function (file) {
 const express = require('express');
 const database = include('databaseConnection');
 const router = include('routes/router');
-const session = require('express-session');
+const session = require("express-session");
 const bodyParser = require('body-parser');
+
 
 const port = process.env.PORT || 3000;
 
@@ -25,33 +26,31 @@ database.connect((err, dbConnection) => {
 });
 
 const app = express();
-const passport = require('./middleware/passport');
+const passport = require("./middleware/passport");
 app.use(bodyParser.json());
 
 app.use(
     session({
-        secret: 'secretSauce1234!',
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            httpOnly: true,
-            secure: false,
-            maxAge: 24 * 60 * 60 * 1000,
-        },
+      secret: "secretSauce1234!",
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: false,
+        maxAge: 24 * 60 * 60 * 1000,
+      },
     })
-);
+  );
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-    console.log(`user details: ${JSON.stringify(req.user)}`);
-    console.log(`session object: ${JSON.stringify(req.session)}`);
-    console.log(
-        `session details passport ${JSON.stringify(req.session.passport)}`
-    );
+    console.log(`user details: ${req.user}`);
+    console.log(`session object: ${req.session}`);
+    console.log(`session details passport ${req.session.passport}`);
     next();
-});
+})
 
 app.use('/api', router);
 process.on('uncaughtException', (err) => {
