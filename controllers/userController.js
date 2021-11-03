@@ -1,5 +1,5 @@
 const userModel = require('../models/userModel').userModel;
-const database = include('/models/databaseConnection');
+const database = include('/databaseConnection');
 
 const getUserByUsernameAndPassword = async (username, password) => {
     let user = await userModel.findOne(username);
@@ -43,7 +43,8 @@ const getAllAdminInfo = (callback) => {
 };
 
 const getAllAdminUsers = (callback) => {
-    let sqlQuery = 'SELECT account_id, username, email FROM accounts';
+    let sqlQuery =
+        'SELECT admin_account_id, username, email FROM admin_accounts';
     database.query(sqlQuery, (err, results, fields) => {
         if (err) {
             callback(err, null);
@@ -55,7 +56,7 @@ const getAllAdminUsers = (callback) => {
 };
 
 const getAdminUserById = (postData, callback) => {
-    let sqlQuery = 'SELECT * FROM accounts WHERE id = :id';
+    let sqlQuery = 'SELECT * FROM admin_accounts WHERE id = :id';
     let params = {
         id: postData.id,
     };
