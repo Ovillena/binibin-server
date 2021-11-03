@@ -6,11 +6,11 @@ const passport = require("../middleware/passport");
 
 
 router.get('/sadness', (req, res) => {
-  res.send("sadness; try again")
+  res.send("sadness. try again")
 })
 
 router.get('/login', (req, res) => {
-  res.send("post me things for authenticate")
+  res.send("At login page. Post username and password to login.")
 })
 router.post("/login", 
   passport.authenticate("local", {
@@ -21,7 +21,7 @@ router.post("/login",
   }
 )
 router.get("/hiddenpage", ensureAuthenticated, (req, res) => {
-  res.send("passed check. you are logged in")
+  res.send("At hidden page for logged in users only. You are logged in")
 })
 router.get("/logout", (req, res) => {
   req.logout();

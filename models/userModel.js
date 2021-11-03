@@ -7,7 +7,7 @@ const userModel = {
     console.log("called findOne")
     // need to update this if we change database for user account id
 
-    let sqlQuery = 'SELECT * FROM admin_accounts WHERE username = $1';
+    let sqlQuery = 'SELECT * FROM accounts WHERE username = $1';
     let values = [username];
     let user = await database.query(sqlQuery, values)
       .then(user => user)
@@ -17,7 +17,7 @@ const userModel = {
   findById: async (id) => {
     console.log(`called findById with param id: ${id}`)
     // need to update this if we change database for user account id
-    let sqlQuery = `SELECT * FROM admin_accounts WHERE admin_account_id = $1`;
+    let sqlQuery = `SELECT * FROM accounts WHERE account_id = $1`;
     let values = [id];
     let user = await database.query(sqlQuery, values)
       .then (user => user)

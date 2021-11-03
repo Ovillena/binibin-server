@@ -24,9 +24,9 @@ const localLogin = new LocalStrategy(
 );
 
 passport.serializeUser(async function (user, done) {
-  console.log("useeerrrrrrrrrrrrrrrr serial " + JSON.stringify(user.admin_account_id));
+  console.log("useeerrrrrrrrrrrrrrrr serial " + JSON.stringify(user.account_id));
   // returning user ID only
-  done(null, user.admin_account_id);
+  done(null, user.account_id);
 });
 
 passport.deserializeUser(async function (id, done) {
