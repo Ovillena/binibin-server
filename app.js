@@ -1,4 +1,5 @@
 const express = require('express');
+
 const app = express();
 const globalErrHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
@@ -20,12 +21,10 @@ database.connect((err, dbConnection) => {
 // Body parser, reading data from body into req.body
 app.use(express.json());
 
-// configuring authentication
-const passport = require('./middleware/passport');
-
+// i think this is sessions
 app.use(
     session({
-        secret: 'secretSauce1234!',
+        secret: "secretSauce1234!",
         resave: false,
         saveUninitialized: false,
         cookie: {
@@ -34,28 +33,28 @@ app.use(
             maxAge: 24 * 60 * 60 * 1000,
         },
     })
-);
+    );
 
+// passport stuff
+const passport = require("./middleware/passport");
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-    console.log(`user details: ${JSON.stringify(req.user)}`);
-    console.log(`session object: ${JSON.stringify(req.session)}`);
-    console.log(
-        `session details passport ${JSON.stringify(req.session.passport)}`
-    );
+    console.log(`user details: ${req.user}`);
+    console.log(`session object: ${req.session}`);
+    console.log(`session details passport ${req.session.passport}`);
     next();
-});
+})
 
-//----------------------------------------------------------------
-
-// Routers
+// Routes
 const indexRouter = include('routes/index');
 const usersRouter = include('routes/user');
+const authRouter = include('routes/auth')
 const entriesRouter = include('routes/entry');
 
 // Routes
+app.use('/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/entries', entriesRouter);
 app.use('/api', (req, res, next) => {

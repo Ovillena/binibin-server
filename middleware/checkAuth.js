@@ -3,8 +3,8 @@ module.exports = {
     if (req.isAuthenticated()) {
       return next();
     }
-    // redirect to correct log in screen when ready
-    res.redirect("/api/sadness");
+    // redirect to correct log in screen when route is ready
+    res.redirect("/auth/login");
   },
   forwardAuthenicated: (req, res, next) => {
     if(!req.isAuthenticated()) {
