@@ -3,23 +3,25 @@ const app = express();
 const globalErrHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
 const database = include('/models/databaseConnection');
-// const router = include('routes/router');
 const session = require('express-session');
-const bodyParser = require('body-parser');
 
-const port = process.env.PORT || 3000;
-
+// Testing ability to connect to db
 database.connect((err, dbConnection) => {
     if (!err) {
-        console.log('Successfully connected to PostgreSQL');
+        console.log('Successfully tested connection to PostgreSQL');
+        dbConnection.release();
+        console.log('Successfully disconnected test connection to PostgreSQL');
     } else {
         console.log('Error Connecting to PostgreSQL');
         console.log(err);
     }
 });
 
+// Body parser, reading data from body into req.body
+app.use(express.json());
+
+// configuring authentication
 const passport = require('./middleware/passport');
-app.use(bodyParser.json());
 
 app.use(
     session({
@@ -46,18 +48,15 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.use('/api', router);
-
 //----------------------------------------------------------------
 
-// Body parser, reading data from body into req.body
-app.use(express.json());
-
-// Routes
+// Routers
 const indexRouter = include('routes/index');
 const usersRouter = include('routes/user');
-app.use('/api/users', usersRouter);
 const entriesRouter = include('routes/entry');
+
+// Routes
+app.use('/api/users', usersRouter);
 app.use('/api/entries', entriesRouter);
 app.use('/api', (req, res, next) => {
     res.send('binibin api');
@@ -70,6 +69,7 @@ app.use('*', (req, res, next) => {
     next(err, req, res, next);
 });
 
+// Error handler
 app.use(globalErrHandler);
 
 module.exports = app;
