@@ -11,6 +11,8 @@ app.use(express.json());
 const indexRouter = include('routes/index');
 const usersRouter = include('routes/user');
 app.use('/api/users', usersRouter);
+const entriesRouter = include('routes/entry');
+app.use('/api/entries', entriesRouter);
 app.use('/api', (req, res, next) => {
     res.send('binibin api');
 });
