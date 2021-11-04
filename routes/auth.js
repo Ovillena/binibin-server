@@ -1,4 +1,3 @@
-const express = require('express');
 const router = require('express').Router();
 const { ensureAuthenticated } = require("../middleware/checkAuth")
 
@@ -12,7 +11,7 @@ router.get('/sadness', (req, res) => {
 router.get('/login', (req, res) => {
   res.send("At login page. Post username and password to login.")
 })
-router.post("/login", 
+router.post("/login",
   passport.authenticate("local", {
     failureRedirect: '/auth/sadness',
   }), (req, res) => {

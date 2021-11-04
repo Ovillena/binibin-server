@@ -1,5 +1,6 @@
 const database = include('models/databaseConnection');
 
+// GET ROUTE: api/entries
 const getAllEntries = (callback) => {
     let sqlQuery =
         'SELECT entry_id, item_name, item_count, unit, waste_type FROM entries_demo';
@@ -10,6 +11,23 @@ const getAllEntries = (callback) => {
             console.log(results);
             callback(null, results);
         }
+    });
+};
+
+// GET ROUTE: api/entries/:startDate/:endDate
+const getEntriesByDateRange = (postData, callback) => {
+    let sqlQuery =
+        'SELECT entry_id, item_name, item_count, unit, waste_type FROM entries_demo WHERE id = :id';
+    let params = {
+      startDate: postData.startDate,
+      endDate: postData.endDate
+    };
+    database.query(sqlQuery, params, (err, result) => {
+        if (err) {
+            callback(err, null);
+        }
+        console.log(results);
+        callback(null, result);
     });
 };
 
