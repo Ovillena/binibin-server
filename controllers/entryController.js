@@ -3,7 +3,7 @@ const database = include('models/databaseConnection');
 // GET ROUTE: api/entries
 const getAllEntries = (callback) => {
     let sqlQuery =
-        'SELECT entry_id, item_name, item_count, unit, waste_type FROM entries_demo';
+        'SELECT entry_id, item_name, item_count, unit, waste_type, entry_date FROM entries_demo';
     database.query(sqlQuery, (err, results) => {
         if (err) {
             callback(err, null);
@@ -17,10 +17,10 @@ const getAllEntries = (callback) => {
 // GET ROUTE: api/entries/:startDate/:endDate
 const getEntriesByDateRange = (postData, callback) => {
     let sqlQuery =
-        'SELECT entry_id, item_name, item_count, unit, waste_type FROM entries_demo WHERE id = :id';
+        'SELECT entry_id, item_name, item_count, unit, waste_type, entry_date FROM entries_demo WHERE date BETWEEN :startDate AND :endDate';
     let params = {
-      startDate: postData.startDate,
-      endDate: postData.endDate
+        startDate: postData.startDate,
+        endDate: postData.endDate,
     };
     database.query(sqlQuery, params, (err, result) => {
         if (err) {
@@ -119,4 +119,5 @@ const getEntriesByDateRange = (postData, callback) => {
 
 module.exports = {
     getAllEntries,
+    getEntriesByDateRange,
 };
