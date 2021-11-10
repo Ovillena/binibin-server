@@ -13,12 +13,13 @@ router.get('/', (req, res) => {
             entryController.getAllEntries((err, result) => {
                 if (err) {
                     res.send('Error reading from PostgreSQL');
-                    console.log('Error reading from PostgreSQL');
+                    console.log(
+                        'Error reading getAllEntries() from PostgreSQL'
+                    );
                     console.log(err);
                 } else {
                     //success
-                    res.json(result.rows);
-
+                    res.status(200).json(result.rows);
                     //Output the results of the query to the Heroku Logs
                     console.log(result.rows);
                 }
@@ -72,9 +73,9 @@ router.post('/add', (req, res) => {
                     console.log(err);
                 } else {
                     //success
-                    res.status(201).send(
-                        `Entry added with ID: ${result.insertId}`
-                    );
+                    res.status(201).json({
+                        status: 'Entry successfully added',
+                    });
                     //Output the results of the query to the Heroku Logs
                     console.log(result.rows);
                 }
