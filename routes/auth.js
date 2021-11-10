@@ -14,6 +14,7 @@ router.get('/login', (req, res) => {
 router.post("/login",
   passport.authenticate("local", {
     failureRedirect: '/auth/sadness',
+
   }), (req, res) => {
     // res.redirect("/");
     res.redirect('/auth/hiddenpage')

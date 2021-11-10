@@ -6,6 +6,15 @@ const AppError = require('./utils/appError');
 const database = include('/models/databaseConnection');
 const session = require('express-session');
 
+const cors = require('cors');
+
+app.use(
+    cors({
+        origin: ['http://localhost:3000', 'https://binibin.vercel.app'],
+        optionsSuccessStatus: 200,
+    })
+);
+
 // Testing ability to connect to db
 database.connect((err, dbConnection) => {
     if (!err) {
