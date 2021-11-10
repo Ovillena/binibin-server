@@ -12,6 +12,8 @@ app.use(
     cors({
         origin: ['http://localhost:3000', 'https://binibin.vercel.app'],
         optionsSuccessStatus: 200,
+        exposedHeaders: ['set-cookie'],
+        credentials: true,
     })
 );
 
