@@ -31,6 +31,27 @@ const getEntriesByDateRange = (postData, callback) => {
     });
 };
 
+// POST ROUTE: api/entries/add
+const addEntry = (postData, callback) => {
+    const { item_name, item_count, unit, waste_type, entry_date } = postData;
+    let sqlQuery =
+        'INSERT INTO entries_demo (item_name, item_count, unit, waste_type, entry_date) VALUES ($1, $2, $3, $4, $5)';
+    if (item_name && item_count && unit && waste_type && entry_date) {
+        database.query(
+            sqlQuery,
+            [item_name, item_count, unit, waste_type, entry_date],
+            (err, result) => {
+                if (err) {
+                    callback(err, null);
+                }
+                callback(null, result);
+            }
+        );
+    } else {
+        callback('missing data', null);
+    }
+};
+
 // const getAdminUserById = (postData, callback) => {
 //     let sqlQuery = 'SELECT * FROM entries_demo WHERE id = :id';
 //     let params = {
@@ -120,4 +141,5 @@ const getEntriesByDateRange = (postData, callback) => {
 module.exports = {
     getAllEntries,
     getEntriesByDateRange,
+    addEntry,
 };

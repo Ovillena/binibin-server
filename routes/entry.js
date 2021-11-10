@@ -54,4 +54,33 @@ router.get('/:startDate/:endDate', (req, res) => {
     });
 });
 
+router.post('/add', (req, res) => {
+    console.log('json data submitted');
+    database.connect((err, client, done) => {
+        if (err) {
+            res.render('error', { message: 'Error connecting to Postgres' });
+            console.log('Error connecting to Postgres');
+            console.log(err);
+        } else {
+            console.log(req.body);
+            entryController.addEntry(req.body, (err, result) => {
+                if (err) {
+                    res.render('error', {
+                        message: 'Error writing to Postgres',
+                    });
+                    console.log('Error writing to Postgres');
+                    console.log(err);
+                } else {
+                    //success
+                    res.status(201).send(
+                        `Entry added with ID: ${result.insertId}`
+                    );
+                    //Output the results of the query to the Heroku Logs
+                    console.log(result.rows);
+                }
+            });
+        }
+    });
+});
+
 module.exports = router;
