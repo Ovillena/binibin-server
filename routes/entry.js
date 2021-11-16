@@ -13,12 +13,13 @@ router.get('/', (req, res) => {
             entryController.getAllEntries((err, result) => {
                 if (err) {
                     res.send('Error reading from PostgreSQL');
-                    console.log('Error reading from PostgreSQL');
+                    console.log(
+                        'Error reading getAllEntries() from PostgreSQL'
+                    );
                     console.log(err);
                 } else {
                     //success
-                    res.json(result.rows);
-
+                    res.status(200).json(result.rows);
                     //Output the results of the query to the Heroku Logs
                     console.log(result.rows);
                 }
@@ -50,6 +51,35 @@ router.get('/:startDate/:endDate', (req, res) => {
                 }
             });
             dbConnection.release();
+        }
+    });
+});
+
+router.post('/add', (req, res) => {
+    console.log('json data submitted');
+    database.connect((err, client, done) => {
+        if (err) {
+            res.render('error', { message: 'Error connecting to Postgres' });
+            console.log('Error connecting to Postgres');
+            console.log(err);
+        } else {
+            console.log(req.body);
+            entryController.addEntry(req.body, (err, result) => {
+                if (err) {
+                    res.render('error', {
+                        message: 'Error writing to Postgres',
+                    });
+                    console.log('Error writing to Postgres');
+                    console.log(err);
+                } else {
+                    //success
+                    res.status(201).json({
+                        status: 'Entry successfully added',
+                    });
+                    //Output the results of the query to the Heroku Logs
+                    console.log(result.rows);
+                }
+            });
         }
     });
 });

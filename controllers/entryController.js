@@ -1,14 +1,13 @@
-const database = include('models/databaseConnection');
+const db = include('models/databaseConnection');
 
 // GET ROUTE: api/entries
 const getAllEntries = (callback) => {
     let sqlQuery =
-        'SELECT entry_id, item_name, item_count, unit, waste_type, entry_date FROM entries_demo';
-    database.query(sqlQuery, (err, results) => {
+        'SELECT entry_id, item_name, item_count, unit, waste_type,EXTRACT (MONTH FROM date) AS MONTH, EXTRACT (DAY FROM date) AS DAY  FROM entries_demo';
+    db.query(sqlQuery, (err, results) => {
         if (err) {
             callback(err, null);
         } else {
-            console.log(results);
             callback(null, results);
         }
     });
@@ -22,7 +21,7 @@ const getEntriesByDateRange = (postData, callback) => {
         startDate: postData.startDate,
         endDate: postData.endDate,
     };
-    database.query(sqlQuery, params, (err, result) => {
+    db.query(sqlQuery, params, (err, result) => {
         if (err) {
             callback(err, null);
         }
@@ -31,12 +30,33 @@ const getEntriesByDateRange = (postData, callback) => {
     });
 };
 
+// POST ROUTE: api/entries/add
+const addEntry = (postData, callback) => {
+    const { item_name, item_count, unit, waste_type, entry_date } = postData;
+    let sqlQuery =
+        'INSERT INTO entries_demo (item_name, item_count, unit, waste_type, entry_date) VALUES ($1, $2, $3, $4, $5)';
+    if (item_name && item_count && unit && waste_type && entry_date) {
+        db.query(
+            sqlQuery,
+            [item_name, item_count, unit, waste_type, entry_date],
+            (err, result) => {
+                if (err) {
+                    callback(err, null);
+                }
+                callback(null, result);
+            }
+        );
+    } else {
+        callback('missing data', null);
+    }
+};
+
 // const getAdminUserById = (postData, callback) => {
 //     let sqlQuery = 'SELECT * FROM entries_demo WHERE id = :id';
 //     let params = {
 //         id: postData.id,
 //     };
-//     database.query(sqlQuery, params, (err, result) => {
+//     db.query(sqlQuery, params, (err, result) => {
 //         if (err) {
 //             callback(err, null);
 //         }
@@ -55,7 +75,7 @@ const getEntriesByDateRange = (postData, callback) => {
 //         email: postData.email,
 //     };
 //     console.log(sqlInsertSalt);
-//     database.query(sqlInsertSalt, params, (err, results, fields) => {
+//     db.query(sqlInsertSalt, params, (err, results, fields) => {
 //         if (err) {
 //             console.log(err);
 //             callback(err, null);
@@ -69,7 +89,7 @@ const getEntriesByDateRange = (postData, callback) => {
 //                 userId: insertedID,
 //             };
 //             console.log(updatePasswordHash);
-//             database.query(
+//             db.query(
 //                 updatePasswordHash,
 //                 params2,
 //                 (err, results, fields) => {
@@ -95,7 +115,7 @@ const getEntriesByDateRange = (postData, callback) => {
 //         last_name: postData.last_name,
 //         email: postData.email,
 //     };
-//     database.query(sqlUpdateUser, params, (err, result) => {
+//     db.query(sqlUpdateUser, params, (err, result) => {
 //         if (err) {
 //             callback(err, null);
 //         }
@@ -107,7 +127,7 @@ const getEntriesByDateRange = (postData, callback) => {
 //     let sqlDeleteUser = 'DELETE FROM users WHERE web_user_id = :userID';
 //     let params = { userID: webUserId };
 //     console.log(sqlDeleteUser);
-//     database.query(sqlDeleteUser, params, (err, results, fields) => {
+//     db.query(sqlDeleteUser, params, (err, results, fields) => {
 //         if (err) {
 //             callback(err, null);
 //         } else {
@@ -120,4 +140,5 @@ const getEntriesByDateRange = (postData, callback) => {
 module.exports = {
     getAllEntries,
     getEntriesByDateRange,
+    addEntry,
 };
