@@ -2,8 +2,7 @@ const db = include('models/databaseConnection');
 
 // GET ROUTE: api/entries
 const getAllEntries = (callback) => {
-    let sqlQuery =
-        'SELECT entry_id, item_name, item_count, unit, waste_type,EXTRACT (MONTH FROM date) AS MONTH, EXTRACT (DAY FROM date) AS DAY  FROM entries_demo';
+    let sqlQuery = 'SELECT entry_id, item_name, item_count, unit, waste_type,EXTRACT (MONTH FROM date) AS month, EXTRACT (DAY FROM date) AS DAY  FROM entries_demo';
     db.query(sqlQuery, (err, results) => {
         if (err) {
             callback(err, null);
