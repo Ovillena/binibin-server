@@ -14,8 +14,7 @@ const getAllEntries = (callback) => {
 
 // GET ROUTE: api/entries/:startDate/:endDate
 const getEntriesByDateRange = (postData, callback) => {
-    let sqlQuery =
-        'SELECT entry_id, item_name, item_count, unit, waste_type, entry_date FROM entries_demo WHERE date BETWEEN :startDate AND :endDate';
+    let sqlQuery = `SELECT entry_id, item_name, item_count, unit, waste_type, TO_CHAR(date, 'dd/mm/yyyy') AS entry_date FROM entries_demo WHERE date BETWEEN :startDate AND :endDate`;
     let params = {
         startDate: postData.startDate,
         endDate: postData.endDate,
@@ -31,13 +30,13 @@ const getEntriesByDateRange = (postData, callback) => {
 
 // POST ROUTE: api/entries/add
 const addEntry = (postData, callback) => {
-    const { item_name, item_count, unit, waste_type, entry_date } = postData;
+    const { item_name, item_count, unit, waste_type } = postData;
     let sqlQuery =
-        'INSERT INTO entries_demo (item_name, item_count, unit, waste_type, entry_date) VALUES ($1, $2, $3, $4, $5)';
-    if (item_name && item_count && unit && waste_type && entry_date) {
+        'INSERT INTO entries_demo (item_name, item_count, unit, waste_type) VALUES ($1, $2, $3, $4)';
+    if (item_name && item_count && unit && waste_type) {
         db.query(
             sqlQuery,
-            [item_name, item_count, unit, waste_type, entry_date],
+            [item_name, item_count, unit, waste_type],
             (err, result) => {
                 if (err) {
                     callback(err, null);
