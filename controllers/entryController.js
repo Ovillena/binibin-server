@@ -1,5 +1,17 @@
 const db = include('models/databaseConnection');
 
+//GET ROUTE: api/items
+const getAllItems = (callback) => {
+    let sqlQuery = 'SELECT item_id, item_name, waste_type_id, unit FROM items';
+    db.query(sqlQuery, (err, results) => {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, results);
+        }
+    });
+};
+
 // GET ROUTE: api/entries
 const getAllEntries = (callback) => {
     let sqlQuery =
@@ -96,4 +108,5 @@ module.exports = {
   getEntriesByDateRange,
     getEntriesByDateRangeAndType,
     addEntry,
+    getAllItems,
 };
