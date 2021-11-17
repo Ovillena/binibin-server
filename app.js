@@ -10,7 +10,7 @@ const cors = require('cors');
 
 app.use(
     cors({
-        origin: ['http://localhost:3000', 'https://binibin.vercel.app'],
+        origin: '*',
         optionsSuccessStatus: 200,
         exposedHeaders: ['set-cookie'],
         credentials: true,
