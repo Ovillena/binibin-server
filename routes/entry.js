@@ -6,7 +6,7 @@ router.get('/', (req, res) => {
     console.log('page hit');
     database.connect(function (err, dbConnection) {
         if (err) {
-            res.send('Error connecting to PostgreSQL');
+            res.status(401).send({ message: 'Error connecting to Postgres' });
             console.log('Error connecting to PostgreSQL');
             console.log(err);
         } else {
@@ -32,7 +32,7 @@ router.get('/items', (req, res) => {
     console.log('@grab items');
     database.connect(function (err, dbConnection) {
         if (err) {
-            res.send('Error connecting to PostgreSQL');
+            res.status(401).send({ message: 'Error connecting to Postgres' });
             console.log('Error connecting to PostgreSQL');
             console.log(err);
         } else {
@@ -42,7 +42,7 @@ router.get('/items', (req, res) => {
                     console.log('Error reading from PostgreSQL');
                     console.log(err);
                 } else {
-                  console.log('_______________________ITMES!!!! ROOUTE');
+                    console.log('_______________________ITMES!!!! ROOUTE');
                     //success
                     res.json(result.rows);
 
@@ -58,7 +58,7 @@ router.get('/:startDate/:endDate', (req, res) => {
     console.log('page hit');
     database.connect(function (err, dbConnection) {
         if (err) {
-            res.send('Error connecting to PostgreSQL');
+            res.status(401).send({ message: 'Error connecting to Postgres' });
             console.log('Error connecting to PostgreSQL');
             console.log(err);
         } else {
@@ -68,7 +68,7 @@ router.get('/:startDate/:endDate', (req, res) => {
                     console.log('Error reading from PostgreSQL');
                     console.log(err);
                 } else {
-                  console.log('_______________________ENTRY ROOUTE');
+                    console.log('_______________________ENTRY ROOUTE');
                     //success
                     res.json(result.rows);
 
@@ -85,7 +85,7 @@ router.get('/:wasteType/:startDate/:endDate', (req, res) => {
     console.log('page hit');
     database.connect(function (err, dbConnection) {
         if (err) {
-            res.send('Error connecting to PostgreSQL');
+            res.status(401).send({ message: 'Error connecting to Postgres' });
             console.log('Error connecting to PostgreSQL');
             console.log(err);
         } else {
@@ -112,14 +112,14 @@ router.post('/add', (req, res) => {
     console.log('json data submitted');
     database.connect((err, client, done) => {
         if (err) {
-            res.render('error', { message: 'Error connecting to Postgres' });
+            res.status(401).send({ message: 'Error connecting to Postgres' });
             console.log('Error connecting to Postgres');
             console.log(err);
         } else {
             console.log(req.body);
             entryController.addEntry(req.body, (err, result) => {
                 if (err) {
-                    res.render('error', {
+                    res.status(401).send({
                         message: 'Error writing to Postgres',
                     });
                     console.log('Error writing to Postgres');
