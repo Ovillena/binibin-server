@@ -15,8 +15,21 @@ const getAllItems = (callback) => {
 // GET ROUTE: api/entries
 const getAllEntries = (callback) => {
     let sqlQuery =
-        'SELECT entry_id, item_name, item_count, unit, waste_type,EXTRACT (MONTH FROM entry_date) AS month, EXTRACT (DAY FROM entry_date) AS day FROM entries_demo ORDER BY entry_date DESC, entry_id DESC';
+        'SELECT entry_id, item_name, item_count, unit, waste_type, EXTRACT (MONTH FROM entry_date) AS month, EXTRACT (DAY FROM entry_date) AS day, account_id FROM entries_demo ORDER BY entry_date DESC, entry_id DESC';
     db.query(sqlQuery, (err, results) => {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, results);
+        }
+    });
+};
+
+// GET: api/entries/:accountId
+const getAllEntriesById = (postData, callback) => {
+    let sqlQuery =
+        'SELECT entry_id, item_name, item_count, unit, waste_type, EXTRACT (MONTH FROM entry_date) AS month, EXTRACT (DAY FROM entry_date) AS day, account_id FROM entries_demo WHERE account_id = $1 ORDER BY entry_date DESC, entry_id DESC';
+    db.query(sqlQuery, [postData.params.accountId], (err, results) => {
         if (err) {
             callback(err, null);
         } else {
@@ -75,13 +88,13 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
 
 // POST ROUTE: api/entries/add
 const addEntry = (postData, callback) => {
-    const { item_name, item_count, waste_type } = postData;
+    const { item_name, item_count, waste_type, account_id } = postData;
     let sqlQuery =
-        'INSERT INTO entries_demo (item_name, item_count, waste_type) VALUES ($1, $2, $3)';
-    if (item_name && item_count && waste_type) {
+        'INSERT INTO entries_demo (item_name, item_count, waste_type, account_id) VALUES ($1, $2, $3, $4)';
+    if (item_name && item_count && waste_type && account_id) {
         db.query(
             sqlQuery,
-            [item_name, item_count, waste_type],
+            [item_name, item_count, waste_type, account_id],
             (err, result) => {
                 if (err) {
                     callback(err, null);
@@ -116,4 +129,5 @@ module.exports = {
     addEntry,
     getAllItems,
     getEntriesByDate,
+    getAllEntriesById,
 };

@@ -28,6 +28,32 @@ router.get('/', (req, res) => {
         }
     });
 });
+router.get('/:accountId', (req, res) => {
+    console.log('page hit');
+    database.connect(function (err, dbConnection) {
+        if (err) {
+            res.status(401).send({ message: 'Error connecting to Postgres' });
+            console.log('Error connecting to PostgreSQL');
+            console.log(err);
+        } else {
+            entryController.getAllEntriesById(req, (err, result) => {
+                if (err) {
+                    res.send('Error reading from PostgreSQL');
+                    console.log(
+                        'Error reading getAllEntries() from PostgreSQL'
+                    );
+                    console.log(err);
+                } else {
+                    //success
+                    res.status(200).json(result.rows);
+                    //Output the results of the query to the Heroku Logs
+                    console.log(result.rows);
+                }
+            });
+            dbConnection.release();
+        }
+    });
+});
 router.get('/items', (req, res) => {
     console.log('@grab items');
     database.connect(function (err, dbConnection) {
