@@ -15,7 +15,7 @@ const getAllItems = (callback) => {
 // GET ROUTE: api/entries
 const getAllEntries = (callback) => {
     let sqlQuery =
-        'SELECT entry_id, item_name, item_count, unit, waste_type,EXTRACT (MONTH FROM entry_date) AS month, EXTRACT (DAY FROM entry_date) AS day FROM entries_demo';
+        'SELECT entry_id, item_name, item_count, unit, waste_type,EXTRACT (MONTH FROM entry_date) AS month, EXTRACT (DAY FROM entry_date) AS day FROM entries_demo ORDER BY entry_date ASC';
     db.query(sqlQuery, (err, results) => {
         if (err) {
             callback(err, null);
@@ -27,7 +27,7 @@ const getAllEntries = (callback) => {
 
 // GET ROUTE: api/entries/:startDate/:endDate
 const getEntriesByDateRange = (postData, callback) => {
-    let sqlQuery = `SELECT EXTRACT (dow FROM entry_date) AS weekday, TO_CHAR(entry_date, 'mm/dd') AS entry_date, SUM(item_count) AS total_items, waste_type FROM entries_demo WHERE entry_date BETWEEN $1 AND $2 GROUP BY entry_date, waste_type;`;
+    let sqlQuery = `SELECT EXTRACT (dow FROM entry_date) AS weekday, TO_CHAR(entry_date, 'mm/dd') AS entry_date, SUM(item_count) AS total_items, waste_type FROM entries_demo WHERE entry_date BETWEEN $1 AND $2 GROUP BY entry_date, waste_type ORDER BY entry_date ASC;`;
     console.log(sqlQuery);
     db.query(
         sqlQuery,
@@ -51,7 +51,9 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
     FROM entries_demo
     WHERE entry_date BETWEEN $1 AND $2
     AND waste_type = $3
-    GROUP BY entry_date, waste_type;`;
+    GROUP BY entry_date, waste_type
+    ORDER BY entry_date ASC
+    ;`;
     console.log(sqlQuery);
     db.query(
         sqlQuery,
@@ -90,7 +92,7 @@ const addEntry = (postData, callback) => {
 
 const getEntriesByDate = (date, callback) => {
     database.query(
-        `SELECT item_count, unit, waste_type, TO_CHAR(entry_date, 'dd/mm/yyyy') AS entry_date FROM entries_demo WHERE emtry_date = $1`,
+        `SELECT item_count, unit, waste_type, TO_CHAR(entry_date, 'dd/mm/yyyy') AS entry_date FROM entries_demo WHERE emtry_date = $1 ORDER BY entry_date ASC`,
         [date],
         (err, result) => {
             if (err) {
@@ -109,4 +111,5 @@ module.exports = {
     getEntriesByDateRangeAndType,
     addEntry,
     getAllItems,
+    getEntriesByDate,
 };
