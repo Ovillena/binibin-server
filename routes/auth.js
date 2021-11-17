@@ -84,7 +84,6 @@ router.get('/checkauth', ensureAuthenticated, (req, res) => {
 
 router.get('/logout', (req, res) => {
     req.logout();
-    res.send('you logged out');
 });
 
 module.exports = router;
