@@ -45,7 +45,7 @@ const getEntriesByDateRange = (postData, callback) => {
 
 // GET ROUTE: api/entries/:wasteType/:startDate/:endDate
 const getEntriesByDateRangeAndType = (postData, callback) => {
-  let sqlQuery = `SELECT EXTRACT (dow FROM entry_date) AS weekday,
+    let sqlQuery = `SELECT EXTRACT (dow FROM entry_date) AS weekday,
     TO_CHAR(entry_date, 'mm/dd') AS entry_date,
     SUM(item_count) AS total_items, waste_type
     FROM entries_demo
@@ -57,7 +57,11 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
     console.log(sqlQuery);
     db.query(
         sqlQuery,
-        [postData.params.startDate, postData.params.endDate, postData.params.wasteType],
+        [
+            postData.params.startDate,
+            postData.params.endDate,
+            postData.params.wasteType,
+        ],
         (err, result) => {
             if (err) {
                 callback(err, null);
@@ -71,13 +75,13 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
 
 // POST ROUTE: api/entries/add
 const addEntry = (postData, callback) => {
-    const { item_name, item_count, unit, waste_type } = postData;
+    const { item_name, item_count, waste_type } = postData;
     let sqlQuery =
-        'INSERT INTO entries_demo (item_name, item_count, unit, waste_type) VALUES ($1, $2, $3, $4)';
-    if (item_name && item_count && unit && waste_type) {
+        'INSERT INTO entries_demo (item_name, item_count, waste_type) VALUES ($1, $2, $3)';
+    if (item_name && item_count && waste_type) {
         db.query(
             sqlQuery,
-            [item_name, item_count, unit, waste_type],
+            [item_name, item_count, waste_type],
             (err, result) => {
                 if (err) {
                     callback(err, null);
@@ -107,7 +111,7 @@ const getEntriesByDate = (date, callback) => {
 
 module.exports = {
     getAllEntries,
-  getEntriesByDateRange,
+    getEntriesByDateRange,
     getEntriesByDateRangeAndType,
     addEntry,
     getAllItems,

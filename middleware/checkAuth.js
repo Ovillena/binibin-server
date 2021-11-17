@@ -4,6 +4,7 @@ module.exports = {
             return next();
         }
         // redirect to correct log in screen when route is ready
+        
         res.redirect('/auth/login');
     },
     forwardAuthenicated: (req, res, next) => {
