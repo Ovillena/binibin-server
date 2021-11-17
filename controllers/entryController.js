@@ -15,7 +15,7 @@ const getAllItems = (callback) => {
 // GET ROUTE: api/entries
 const getAllEntries = (callback) => {
     let sqlQuery =
-        'SELECT entry_id, item_name, item_count, unit, waste_type,EXTRACT (MONTH FROM entry_date) AS month, EXTRACT (DAY FROM entry_date) AS day FROM entries_demo ORDER BY entry_date ASC';
+        'SELECT entry_id, item_name, item_count, unit, waste_type,EXTRACT (MONTH FROM entry_date) AS month, EXTRACT (DAY FROM entry_date) AS day FROM entries_demo ORDER BY entry_date DESC, entry_id DESC';
     db.query(sqlQuery, (err, results) => {
         if (err) {
             callback(err, null);
@@ -92,7 +92,7 @@ const addEntry = (postData, callback) => {
 
 const getEntriesByDate = (date, callback) => {
     database.query(
-        `SELECT item_count, unit, waste_type, TO_CHAR(entry_date, 'dd/mm/yyyy') AS entry_date FROM entries_demo WHERE emtry_date = $1 ORDER BY entry_date ASC`,
+        `SELECT item_count, unit, waste_type, TO_CHAR(entry_date, 'dd/mm/yyyy') AS entry_date FROM entries_demo WHERE emtry_date = $1 ORDER BY entry_id DESC`,
         [date],
         (err, result) => {
             if (err) {
