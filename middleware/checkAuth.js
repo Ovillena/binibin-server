@@ -4,8 +4,9 @@ module.exports = {
             return next();
         }
         // redirect to correct log in screen when route is ready
-        
-        res.redirect('/auth/login');
+
+        // res.redirect('/auth/login');
+        res.json({"logged in": false})
     },
     forwardAuthenicated: (req, res, next) => {
         if (!req.isAuthenticated()) {

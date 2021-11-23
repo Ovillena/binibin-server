@@ -13,6 +13,7 @@ router.get('/login', (req, res) => {
         if (err) {
             return next(err);
         }
+
         return res.json({
             account_id: user.account_id,
             username: user.username,
@@ -23,9 +24,6 @@ router.get('/login', (req, res) => {
             is_admin: user.is_admin,
         });
     });
-
-    res.json(userObj);
-    res.send(userObj);
 });
 
 // router.post(
@@ -44,6 +42,7 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) {
+            console.log('------- is there an error ----------');
             return next(err);
         }
         if (!user) {
@@ -53,6 +52,7 @@ router.post('/login', (req, res, next) => {
             if (err) {
                 return next(err);
             }
+            console.log('--------------login return json ------------');
             return res.json({
                 account_id: user.account_id,
                 username: user.username,
@@ -71,6 +71,7 @@ router.get('/hiddenpage', ensureAuthenticated, (req, res) => {
 });
 
 router.get('/checkauth', ensureAuthenticated, (req, res) => {
+    res.json({ 'logged in': true });
     res.json({
         account_id: req.user.rows[0].account_id,
         username: req.user.rows[0].username,
@@ -84,7 +85,6 @@ router.get('/checkauth', ensureAuthenticated, (req, res) => {
 
 router.get('/logout', (req, res) => {
     req.logout();
-    res.send('you logged out');
 });
 
 module.exports = router;
