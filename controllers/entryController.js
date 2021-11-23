@@ -86,15 +86,62 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
     );
 };
 
+// POST ROUTE: api/entries/add ---OLD---
+// const addEntry = (postData, callback) => {
+//     const { item_name, item_count, waste_type, account_id } = postData;
+//     let sqlQuery =
+//         'INSERT INTO entries_demo (item_name, item_count, waste_type, account_id) VALUES ($1, $2, $3, $4)';
+//     if (item_name && item_count && waste_type && account_id) {
+//         db.query(
+//             sqlQuery,
+//             [item_name, item_count, waste_type, account_id],
+//             (err, result) => {
+//                 if (err) {
+//                     callback(err, null);
+//                 }
+//                 callback(null, result);
+//             }
+//         );
+//     } else {
+//         callback('missing data', null);
+//     }
+// };
+
+//---------------------------
+
 // POST ROUTE: api/entries/add
 const addEntry = (postData, callback) => {
-    const { item_name, item_count, waste_type, account_id } = postData;
+    const {
+        garbage_text,
+        garbage_count,
+        compost_text,
+        compost_count,
+        recycle_text,
+        recycle_count,
+        account_id,
+    } = postData;
     let sqlQuery =
-        'INSERT INTO entries_demo (item_name, item_count, waste_type, account_id) VALUES ($1, $2, $3, $4)';
-    if (item_name && item_count && waste_type && account_id) {
+        'INSERT INTO entries (garbage_text, garbage_count, compost_text, compost_count, recycle_text, recycle_count, account_id) VALUES ($1, $2, $3, $4, $5, $6, $7)';
+    if (
+        garbage_text &&
+        garbage_count &&
+        compost_text &&
+        compost_count &&
+        recycle_text &&
+        recycle_count &&
+        account_id
+    ) {
         db.query(
             sqlQuery,
-            [item_name, item_count, waste_type, account_id],
+            [
+                garbage_text,
+                garbage_count,
+                compost_text,
+                compost_count,
+                recycle_text,
+                recycle_count,
+                account_id,
+            ],
             (err, result) => {
                 if (err) {
                     callback(err, null);
@@ -106,6 +153,8 @@ const addEntry = (postData, callback) => {
         callback('missing data', null);
     }
 };
+
+//-------------------------------
 
 const getEntriesByDate = (date, callback) => {
     database.query(
