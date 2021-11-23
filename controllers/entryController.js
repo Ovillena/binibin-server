@@ -130,18 +130,11 @@ const addEntry = (postData, callback) => {
         recycling_text,
         recycling_count,
         account_id,
-    } = postData;
+    } = postData[0];
+
     let sqlQuery =
         'INSERT INTO entries (garbage_text, garbage_count, compost_text, compost_count, recycling_text, recycling_count, account_id) VALUES ($1, $2, $3, $4, $5, $6, $7)';
-    if (
-        garbage_text &&
-        garbage_count &&
-        compost_text &&
-        compost_count &&
-        recycling_text &&
-        recycling_count &&
-        account_id
-    ) {
+    if (account_id) {
         db.query(
             sqlQuery,
             [
