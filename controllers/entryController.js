@@ -116,19 +116,19 @@ const addEntry = (postData, callback) => {
         garbage_count,
         compost_text,
         compost_count,
-        recycle_text,
-        recycle_count,
+        recycling_text,
+        recycling_count,
         account_id,
     } = postData;
     let sqlQuery =
-        'INSERT INTO entries (garbage_text, garbage_count, compost_text, compost_count, recycle_text, recycle_count, account_id) VALUES ($1, $2, $3, $4, $5, $6, $7)';
+        'INSERT INTO entries (garbage_text, garbage_count, compost_text, compost_count, recycling_text, recycling_count, account_id) VALUES ($1, $2, $3, $4, $5, $6, $7)';
     if (
         garbage_text &&
         garbage_count &&
         compost_text &&
         compost_count &&
-        recycle_text &&
-        recycle_count &&
+        recycling_text &&
+        recycling_count &&
         account_id
     ) {
         db.query(
@@ -138,8 +138,8 @@ const addEntry = (postData, callback) => {
                 garbage_count,
                 compost_text,
                 compost_count,
-                recycle_text,
-                recycle_count,
+                recycling_text,
+                recycling_count,
                 account_id,
             ],
             (err, result) => {
