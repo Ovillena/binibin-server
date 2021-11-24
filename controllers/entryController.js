@@ -113,15 +113,6 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
 
 // POST ROUTE: api/entries/add
 const addEntry = (postData, callback) => {
-<<<<<<< HEAD
-    const { item_name, item_count, waste_type } = postData;
-    let sqlQuery =
-        'INSERT INTO entries_demo (item_name, item_count, waste_type) VALUES ($1, $2, $3)';
-    if (item_name && item_count && waste_type) {
-        db.query(
-            sqlQuery,
-            [item_name, item_count, waste_type],
-=======
     const {
         garbage_text,
         garbage_count,
@@ -146,7 +137,6 @@ const addEntry = (postData, callback) => {
                 recycling_count,
                 account_id,
             ],
->>>>>>> main
             (err, result) => {
                 if (err) {
                     callback(err, null);
