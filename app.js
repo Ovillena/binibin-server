@@ -12,11 +12,7 @@ app.set('trust proxy', 1);
 
 app.use(
     cors({
-        origin: [
-            'http://localhost:3000',
-            'https://binibin.vercel.app',
-            'https://binibinapp.vercel.app',
-        ],
+        origin: ['http://localhost:3000', 'https://binibinapp.vercel.app'],
         optionsSuccessStatus: 200,
         exposedHeaders: ['set-cookie'],
         credentials: true,
