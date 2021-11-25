@@ -142,7 +142,11 @@ router.post('/add', (req, res) => {
             console.log('Error connecting to Postgres');
             console.log(err);
         } else {
-            console.log(req.body);
+            console.log(
+                '-------add route------',
+                req,
+                '-------add route------'
+            );
             entryController.addEntry(req.body, (err, result) => {
                 if (err) {
                     res.status(401).send({

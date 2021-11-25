@@ -123,7 +123,7 @@ const addEntry = (postData, callback) => {
         recycling_text,
         recycling_count,
         account_id,
-    } = postData[0];
+    } = postData;
 
     let sqlQuery =
         'INSERT INTO entries (garbage_text, garbage_count, compost_text, compost_count, recycling_text, recycling_count, account_id) VALUES ($1, $2, $3, $4, $5, $6, $7)';
