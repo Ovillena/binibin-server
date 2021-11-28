@@ -69,7 +69,8 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
     SUM(${wasteCount}) AS total_items
     FROM entries
     WHERE entry_date BETWEEN $1 AND $2
-    GROUP BY entry_date;`;
+    GROUP BY entry_date, entry_id
+    ORDER BY entry_id ASC;`;
     console.log(sqlQuery);
     db.query(
         sqlQuery,
