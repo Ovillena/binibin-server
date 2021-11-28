@@ -49,19 +49,19 @@ const getEntriesByDateRange = (postData, callback) => {
 // GET ROUTE: api/entries/:wasteType/:startDate/:endDate
 const getEntriesByDateRangeAndType = (postData, callback) => {
     let wasteText;
-    let wasteCount
-    switch(postData.params.wasteType) {
-        case "garbage":
-            wasteText = "garbage_text";
-            wasteCount = "garbage_count";
+    let wasteCount;
+    switch (postData.params.wasteType) {
+        case 'garbage':
+            wasteText = 'garbage_text';
+            wasteCount = 'garbage_count';
             break;
-        case "compost":
-            wasteText = "compost_text";
-            wasteCount = "compost_count";
+        case 'compost':
+            wasteText = 'compost_text';
+            wasteCount = 'compost_count';
             break;
-        case "recycling":
-            wasteText = "recycling_text";
-            wasteCount = "recycling_count";
+        case 'recycling':
+            wasteText = 'recycling_text';
+            wasteCount = 'recycling_count';
             break;
     }
     let sqlQuery = `SELECT EXTRACT (dow FROM entry_date) AS weekday,
@@ -73,10 +73,7 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
     console.log(sqlQuery);
     db.query(
         sqlQuery,
-        [
-            postData.params.startDate,
-            postData.params.endDate,
-        ],
+        [postData.params.startDate, postData.params.endDate],
         (err, result) => {
             if (err) {
                 callback(err, null);
@@ -113,6 +110,11 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
 
 // POST ROUTE: api/entries/add
 const addEntry = (postData, callback) => {
+    console.log(
+        '-------addEntry------',
+        postData,
+        '----------------------kjasdflkawf POST DATA'
+    );
     const {
         garbage_text,
         garbage_count,
@@ -121,7 +123,7 @@ const addEntry = (postData, callback) => {
         recycling_text,
         recycling_count,
         account_id,
-    } = postData[0];
+    } = postData;
 
     let sqlQuery =
         'INSERT INTO entries (garbage_text, garbage_count, compost_text, compost_count, recycling_text, recycling_count, account_id) VALUES ($1, $2, $3, $4, $5, $6, $7)';
