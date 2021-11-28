@@ -30,7 +30,8 @@ const getEntriesByDateRange = (postData, callback) => {
     let sqlQuery = `SELECT EXTRACT (dow FROM entry_date) AS weekday, TO_CHAR(entry_date, 'mm/dd') AS entry_date, garbage_count, compost_count, recycling_count
     FROM entries
     WHERE entry_date BETWEEN $1 AND $2
-    GROUP BY entry_date`;
+    GROUP BY entry_id
+    ORDER BY entry_id ASC;`;
     console.log(sqlQuery);
     db.query(
         sqlQuery,
