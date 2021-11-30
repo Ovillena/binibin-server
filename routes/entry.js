@@ -136,7 +136,7 @@ router.get('/:wasteType/:startDate/:endDate', (req, res) => {
 
 router.post('/add', (req, res) => {
     console.log('json data submitted');
-    database.connect((err, client, done) => {
+    database.connect((err, dbConnection) => {
         if (err) {
             res.status(401).send({ message: 'Error connecting to Postgres' });
             console.log('Error connecting to Postgres');
@@ -163,6 +163,7 @@ router.post('/add', (req, res) => {
                     console.log(result.rows);
                 }
             });
+            dbConnection.release();
         }
     });
 });
