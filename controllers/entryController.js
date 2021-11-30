@@ -14,8 +14,19 @@ const getAllItems = (callback) => {
 
 // GET ROUTE: api/entries
 const getAllEntries = (callback) => {
-    let sqlQuery =
-        'SELECT entry_id, garbage_text, garbage_count, compost_text, compost_count, recycling_text, recycling_count, EXTRACT (MONTH FROM entry_date) AS month, EXTRACT (DAY FROM entry_date) AS day FROM entries ORDER BY entry_id DESC';
+    // let sqlQuery =
+    //     'SELECT entry_id, garbage_text, garbage_count, compost_text, compost_count, recycling_text, recycling_count, EXTRACT (MONTH FROM entry_date) AS month, EXTRACT (DAY FROM entry_date) AS day FROM entries ORDER BY entry_id DESC';
+    let sqlQuery = `SELECT
+SUM(garbage_count) AS garbage_count,
+STRING_AGG(garbage_text, '/n ') AS garbage_text,
+SUM(compost_count) AS compost_count,
+STRING_AGG(compost_text, '/n ') AS compost_text,
+SUM(recycling_count) AS recycling_count,
+STRING_AGG(recycling_text, '/n ') AS recycling_text,
+EXTRACT (MONTH FROM entry_date) AS month,
+EXTRACT (DAY FROM entry_date) AS day FROM entries
+GROUP BY entry_date
+ORDER BY entry_date DESC;`;
     db.query(sqlQuery, (err, results) => {
         if (err) {
             callback(err, null);
