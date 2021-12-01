@@ -43,8 +43,7 @@ database.connect((err, dbConnection) => {
         dbConnection.release();
         console.log('Successfully disconnected test connection to PostgreSQL');
     } else {
-        console.log('Error Connecting to PostgreSQL');
-        console.log(err);
+        console.log('Error Connecting to PostgreSQL', err);
     }
 });
 
