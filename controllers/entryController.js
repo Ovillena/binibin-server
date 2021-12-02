@@ -14,8 +14,19 @@ const getAllItems = (callback) => {
 
 // GET ROUTE: api/entries
 const getAllEntries = (callback) => {
-    let sqlQuery =
-        'SELECT entry_id, garbage_text, garbage_count, compost_text, compost_count, recycling_text, recycling_count, EXTRACT (MONTH FROM entry_date) AS month, EXTRACT (DAY FROM entry_date) AS day FROM entries ORDER BY entry_id DESC';
+    // let sqlQuery =
+    //     'SELECT entry_id, garbage_text, garbage_count, compost_text, compost_count, recycling_text, recycling_count, EXTRACT (MONTH FROM entry_date) AS month, EXTRACT (DAY FROM entry_date) AS day FROM entries ORDER BY entry_id DESC';
+    let sqlQuery = `SELECT
+SUM(garbage_count) AS garbage_count,
+array_to_string(array_agg(CASE WHEN garbage_text = '' THEN NULL ELSE garbage_text END), '\n') garbage_text,
+SUM(compost_count) AS compost_count,
+array_to_string(array_agg(CASE WHEN compost_text = '' THEN NULL ELSE compost_text END), '\n') compost_text,
+SUM(recycling_count) AS recycling_count,
+array_to_string(array_agg(CASE WHEN recycling_text = '' THEN NULL ELSE recycling_text END), '\n') recycling_text,
+EXTRACT (MONTH FROM entry_date) AS month,
+EXTRACT (DAY FROM entry_date) AS day FROM entries
+GROUP BY entry_date
+ORDER BY entry_date DESC;`;
     db.query(sqlQuery, (err, results) => {
         if (err) {
             callback(err, null);
@@ -70,8 +81,8 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
     SUM(${wasteCount}) AS total_items
     FROM entries
     WHERE entry_date BETWEEN $1 AND $2
-    GROUP BY entry_date, entry_id
-    ORDER BY entry_id ASC;`;
+    GROUP BY entry_date
+    ORDER BY entry_date ASC;`;
     console.log(sqlQuery);
     db.query(
         sqlQuery,
