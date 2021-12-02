@@ -7,24 +7,24 @@ router.get('/sadness', (req, res) => {
     res.send('sadness. try again');
 });
 
-router.get('/login', (req, res) => {
-    // res.send('At login page. Post username and password to login.');
-    req.logIn(user, function (err) {
-        if (err) {
-            return next(err);
-        }
+// router.get('/login', (req, res) => {
+//     // res.send('At login page. Post username and password to login.');
+//     req.logIn(user, function (err) {
+//         if (err) {
+//             return next(err);
+//         }
 
-        return res.json({
-            account_id: user.account_id,
-            username: user.username,
-            email: user.email,
-            school_id: user.school_id,
-            admin_account_id: user.admin_account_id,
-            display_name: user.display_name,
-            is_admin: user.is_admin,
-        });
-    });
-});
+//         return res.json({
+//             account_id: user.account_id,
+//             username: user.username,
+//             email: user.email,
+//             school_id: user.school_id,
+//             admin_account_id: user.admin_account_id,
+//             display_name: user.display_name,
+//             is_admin: user.is_admin,
+//         });
+//     });
+// });
 
 // router.post(
 //     '/login',
