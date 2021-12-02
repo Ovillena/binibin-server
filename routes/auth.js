@@ -35,8 +35,8 @@ router.get('/hiddenpage', ensureAuthenticated, (req, res) => {
 });
 
 router.get('/checkauth', ensureAuthenticated, (req, res) => {
-    res.json({ 'logged in': true });
     res.json({
+        'logged in': true,
         account_id: req.user.rows[0].account_id,
         username: req.user.rows[0].username,
         email: req.user.rows[0].email,
