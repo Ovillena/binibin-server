@@ -2,8 +2,11 @@ const router = require('express').Router();
 const database = include('./models/databaseConnection');
 const entryController = require('../controllers/entryController');
 
-router.get('/', (req, res) => {
-    entryController.getAllEntries((err, result) => {
+const jwt = require("../jwt")
+
+router.get('/', jwt.authorize, (req, res) => {
+    console.log("get all entries", req.user)
+    entryController.getAllEntries(req.user.account_id, (err, result) => {
         if (err) {
             res.send('Error reading from PostgreSQL');
             console.log('Error reading getAllEntries() from PostgreSQL', err);
@@ -71,7 +74,7 @@ router.get('/:accountId', (req, res) => {
 //     //     }
 //     // });
 // });
-router.get('/:startDate/:endDate', (req, res) => {
+router.get('/:startDate/:endDate', jwt.authorize, (req, res) => {
     entryController.getEntriesByDateRange(req, (err, result) => {
         if (err) {
             res.send('Error reading from PostgreSQL');
@@ -96,7 +99,10 @@ router.get('/:startDate/:endDate', (req, res) => {
     // });
 });
 
-router.get('/:wasteType/:startDate/:endDate', (req, res) => {
+router.get('/:wasteType/:startDate/:endDate', jwt.authorize, (req, res) => {
+
+    console.log("user is logged in", req.user)
+
     entryController.getEntriesByDateRangeAndType(req, (err, result) => {
         if (err) {
             res.send('Error reading from PostgreSQL');
@@ -106,7 +112,9 @@ router.get('/:wasteType/:startDate/:endDate', (req, res) => {
             res.json(result.rows);
 
             //Output the results of the query to the Heroku Logs
-            console.log('getEntriesByDateRangeAndType', result.rows);
+            // console.log('getEntriesByDateRangeAndType', result.rows);
+            console.log("getEntriesByDateRangeAndType", req.params.startDate, req.params.endDate)
+
         }
     });
     // database.connect(function (err, dbConnection) {
@@ -121,8 +129,9 @@ router.get('/:wasteType/:startDate/:endDate', (req, res) => {
     // });
 });
 
-router.post('/add', (req, res) => {
-    entryController.addEntry(req.body, (err, result) => {
+router.post('/add', jwt.authorize, (req, res) => { 
+
+    entryController.addEntry(req.body, req.user.account_id, (err, result) => {
         if (err) {
             res.status(401).send({
                 message: 'Error writing to Postgres',
