@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const { ensureAuthenticated } = require('../middleware/checkAuth');
 
+const jwt = require('../jwt')
+
 const passport = require('../middleware/passport');
 
 router.post('/login', (req, res, next) => {
@@ -17,7 +19,7 @@ router.post('/login', (req, res, next) => {
                 return next(err);
             }
             console.log('--------------login return json ------------');
-            return res.json({
+            const userData = {
                 account_id: user.account_id,
                 username: user.username,
                 email: user.email,
@@ -25,7 +27,9 @@ router.post('/login', (req, res, next) => {
                 admin_account_id: user.admin_account_id,
                 display_name: user.display_name,
                 is_admin: user.is_admin,
-            });
+            }
+            const token = jwt.signToken(userData)
+            return res.send({token: token});
         });
     })(req, res, next);
 });
@@ -35,19 +39,8 @@ router.get('/hiddenpage', ensureAuthenticated, (req, res) => {
 });
 
 router.get('/checkauth', ensureAuthenticated, (req, res) => {
-    console.log('check auth -!@#!@#!@#!@#!@#!@#!@#');
-    console.log({
-        account_id: req.user.rows[0].account_id,
-        username: req.user.rows[0].username,
-        email: req.user.rows[0].email,
-        school_id: req.user.rows[0].school_id,
-        admin_account_id: req.user.rows[0].admin_account_id,
-        display_name: req.user.rows[0].display_name,
-        is_admin: req.user.rows[0].is_admin,
-    });
-    console.log('check auth -!@#!@#!@#!@#!@#!@#!@#');
-
     res.json({
+        'logged in': true,
         account_id: req.user.rows[0].account_id,
         username: req.user.rows[0].username,
         email: req.user.rows[0].email,
