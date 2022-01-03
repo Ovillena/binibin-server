@@ -35,7 +35,18 @@ router.get('/hiddenpage', ensureAuthenticated, (req, res) => {
 });
 
 router.get('/checkauth', ensureAuthenticated, (req, res) => {
-    res.json({ 'logged in': true });
+    console.log('check auth -!@#!@#!@#!@#!@#!@#!@#');
+    console.log({
+        account_id: req.user.rows[0].account_id,
+        username: req.user.rows[0].username,
+        email: req.user.rows[0].email,
+        school_id: req.user.rows[0].school_id,
+        admin_account_id: req.user.rows[0].admin_account_id,
+        display_name: req.user.rows[0].display_name,
+        is_admin: req.user.rows[0].is_admin,
+    });
+    console.log('check auth -!@#!@#!@#!@#!@#!@#!@#');
+
     res.json({
         account_id: req.user.rows[0].account_id,
         username: req.user.rows[0].username,

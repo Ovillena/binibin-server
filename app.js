@@ -4,7 +4,8 @@ const app = express();
 const globalErrHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
 const database = include('/models/databaseConnection');
-const session = require('express-session');
+// const session = require('express-session');
+const session = require('cookie-session');
 
 const cors = require('cors');
 
@@ -12,7 +13,11 @@ app.set('trust proxy', 1);
 
 app.use(
     cors({
-        origin: ['http://localhost:3000', 'https://binibinapp.vercel.app'],
+        origin: [
+            'http://localhost:3000',
+            'https://binibinapp.vercel.app',
+            'https://binibin-client.herokuapp.com',
+        ],
         optionsSuccessStatus: 200,
         exposedHeaders: ['set-cookie'],
         credentials: true,
@@ -68,7 +73,7 @@ app.use(
 // passport stuff
 const passport = require('./middleware/passport');
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 app.use((req, res, next) => {
     console.log(`user details: ${JSON.stringify(req.user)}`);
