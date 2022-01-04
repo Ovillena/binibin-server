@@ -132,7 +132,7 @@ router.get('/:wasteType/:startDate/:endDate', jwt.authorize, (req, res) => {
 });
 
 router.post('/add', jwt.authorize, (req, res) => {
-    entryController.addEntry(req.body, req.user.account_id, (err, result) => {
+    entryController.addEntry(req.body.data, req.user.account_id, (err, result) => {
         if (err) {
             res.status(401).send({
                 message: 'Error writing to Postgres',
