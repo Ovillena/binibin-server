@@ -17,6 +17,7 @@ app.use(
             'http://localhost:3000',
             'https://binibinapp.vercel.app',
             'https://binibin-client.herokuapp.com',
+            'http://binibin-client.herokuapp.com',
         ],
         optionsSuccessStatus: 200,
         exposedHeaders: ['set-cookie'],
