@@ -134,7 +134,7 @@ router.get('/:wasteType/:startDate/:endDate', jwt.authorize, (req, res) => {
 //get all entires for the month for each waste type
 router.get(
     '/:wasteType/:startDate/:endDate/month',
-    jwt.authorize,
+
     (req, res) => {
         console.log('user is logged in', req.user);
 

@@ -123,7 +123,7 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
     );
 };
 
-// GET ROUTE: api/entries/:wasteType/:startDate/:endDate
+// GET ROUTE: api/entries/:wasteType/:startDate/:endDate/month
 const getEntriesByMonthRangeAndType = (postData, callback) => {
     let wasteText;
     let wasteCount;
@@ -146,14 +146,14 @@ const getEntriesByMonthRangeAndType = (postData, callback) => {
         postData.params.startDate,
         postData.params.endDate
     );
-    let sqlQuery = `TO_CHAR(entry_date, 'yy/mm') as monthEntries,
+    let sqlQuery = `SELECT TO_CHAR(entry_date, 'yy/mm') as month_entries,
     SUM(${wasteCount}) AS total_items
     FROM entries
     JOIN accounts ON accounts.account_id = entries.account_id
     WHERE entry_date BETWEEN $1 AND $2
     AND entries.account_id = $3
-    GROUP BY monthEntries
-    ORDER BY monthEntries ASC;`;
+    GROUP BY month_entries
+    ORDER BY month_entries ASC;`;
     console.log(sqlQuery);
     db.query(
         sqlQuery,
