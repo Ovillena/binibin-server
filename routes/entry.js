@@ -2,10 +2,10 @@ const router = require('express').Router();
 const database = include('./models/databaseConnection');
 const entryController = require('../controllers/entryController');
 
-const jwt = require("../jwt")
+const jwt = require('../jwt');
 
 router.get('/', jwt.authorize, (req, res) => {
-    console.log("get all entries", req.user)
+    console.log('get all entries', req.user);
     entryController.getAllEntries(req.user.account_id, (err, result) => {
         if (err) {
             res.send('Error reading from PostgreSQL');
@@ -100,8 +100,7 @@ router.get('/:startDate/:endDate', jwt.authorize, (req, res) => {
 });
 
 router.get('/:wasteType/:startDate/:endDate', jwt.authorize, (req, res) => {
-
-    console.log("user is logged in", req.user)
+    console.log('user is logged in', req.user);
 
     entryController.getEntriesByDateRangeAndType(req, (err, result) => {
         if (err) {
@@ -113,8 +112,11 @@ router.get('/:wasteType/:startDate/:endDate', jwt.authorize, (req, res) => {
 
             //Output the results of the query to the Heroku Logs
             // console.log('getEntriesByDateRangeAndType', result.rows);
-            console.log("getEntriesByDateRangeAndType", req.params.startDate, req.params.endDate)
-
+            console.log(
+                'getEntriesByDateRangeAndType',
+                req.params.startDate,
+                req.params.endDate
+            );
         }
     });
     // database.connect(function (err, dbConnection) {
@@ -129,8 +131,7 @@ router.get('/:wasteType/:startDate/:endDate', jwt.authorize, (req, res) => {
     // });
 });
 
-router.post('/add', jwt.authorize, (req, res) => { 
-
+router.post('/add', jwt.authorize, (req, res) => {
     entryController.addEntry(req.body, req.user.account_id, (err, result) => {
         if (err) {
             res.status(401).send({

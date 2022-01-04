@@ -24,7 +24,7 @@ array_to_string(array_agg(CASE WHEN compost_text = '' THEN NULL ELSE compost_tex
 SUM(recycling_count) AS recycling_count,
 array_to_string(array_agg(CASE WHEN recycling_text = '' THEN NULL ELSE recycling_text END), '\n') recycling_text,
 EXTRACT (MONTH FROM entry_date) AS month,
-EXTRACT (DAY FROM entry_date) AS day 
+EXTRACT (DAY FROM entry_date) AS day
 FROM entries
 JOIN accounts ON accounts.account_id = entries.account_id
 WHERE entries.account_id = $1
@@ -144,7 +144,7 @@ const addEntry = (postData, account_id, callback) => {
         compost_count,
         recycling_text,
         recycling_count,
-    } = postData;
+    } = postData.entryContent;
 
     let sqlQuery =
         'INSERT INTO entries (garbage_text, garbage_count, compost_text, compost_count, recycling_text, recycling_count, account_id) VALUES ($1, $2, $3, $4, $5, $6, $7)';
