@@ -131,22 +131,53 @@ router.get('/:wasteType/:startDate/:endDate', jwt.authorize, (req, res) => {
     // });
 });
 
+//get all entires for the month for each waste type
+router.get(
+    '/:wasteType/:startDate/:endDate/month',
+    jwt.authorize,
+    (req, res) => {
+        console.log('user is logged in', req.user);
+
+        entryController.getEntriesByMonthRangeAndType(req, (err, result) => {
+            if (err) {
+                res.send('Error reading from PostgreSQL');
+                console.log('Error reading from PostgreSQL', err);
+            } else {
+                //success
+                res.json(result.rows);
+
+                //Output the results of the query to the Heroku Logs
+                // console.log('getEntriesByDateRangeAndType', result.rows);
+                console.log(
+                    'getEntriesByMonthRangeAndType',
+                    req.params.startDate,
+                    req.params.endDate
+                );
+            }
+        });
+    }
+);
+
 router.post('/add', jwt.authorize, (req, res) => {
-    entryController.addEntry(req.body.data, req.user.account_id, (err, result) => {
-        if (err) {
-            res.status(401).send({
-                message: 'Error writing to Postgres',
-            });
-            console.log('Error writing to Postgres', err);
-        } else {
-            //success
-            res.status(201).json({
-                status: 'Entry successfully added',
-            });
-            //Output the results of the query to the Heroku Logs
-            console.log('addEntry', result.rows);
+    entryController.addEntry(
+        req.body.data,
+        req.user.account_id,
+        (err, result) => {
+            if (err) {
+                res.status(401).send({
+                    message: 'Error writing to Postgres',
+                });
+                console.log('Error writing to Postgres', err);
+            } else {
+                //success
+                res.status(201).json({
+                    status: 'Entry successfully added',
+                });
+                //Output the results of the query to the Heroku Logs
+                console.log('addEntry', result.rows);
+            }
         }
-    });
+    );
     // database.connect((err, dbConnection) => {
     //     if (err) {
     //         res.status(401).send({ message: 'Error connecting to Postgres' });

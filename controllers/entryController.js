@@ -123,7 +123,7 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
     );
 };
 
-// GET ROUTE: api/entries/:wasteType/:startMonth/:endMonth
+// GET ROUTE: api/entries/:wasteType/:startDate/:endDate
 const getEntriesByMonthRangeAndType = (postData, callback) => {
     let wasteText;
     let wasteCount;
@@ -143,8 +143,8 @@ const getEntriesByMonthRangeAndType = (postData, callback) => {
     }
     console.log(
         'getEntriesByDateRange MONTH MONTH MONTHTHHHHHH',
-        postData.params.startMonth,
-        postData.params.endMonth
+        postData.params.startDate,
+        postData.params.endDate
     );
     let sqlQuery = `TO_CHAR(entry_date, 'yy/mm') as monthEntries,
     SUM(${wasteCount}) AS total_items
@@ -158,8 +158,8 @@ const getEntriesByMonthRangeAndType = (postData, callback) => {
     db.query(
         sqlQuery,
         [
-            postData.params.startMonth,
-            postData.params.endMonth,
+            postData.params.startDate,
+            postData.params.endDate,
             postData.user.account_id,
         ],
         (err, result) => {
@@ -261,4 +261,5 @@ module.exports = {
     getEntriesByDateRangeAndType,
     addEntry,
     getAllItems,
+    getEntriesByMonthRangeAndType,
 };
