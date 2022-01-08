@@ -204,12 +204,12 @@ const addEntry = (postData, account_id, callback) => {
         '----------------------kjasdflkawf POST DATA'
     );
     const {
-        garbage_text,
-        garbage_count,
-        compost_text,
-        compost_count,
-        recycling_text,
-        recycling_count,
+        date,
+	    item_1_count,
+	    item_2_count,
+	    item_3_count,
+	    item_4_count,
+		item_5_count,
     } = postData;
 
     let sqlQuery =
@@ -218,12 +218,12 @@ const addEntry = (postData, account_id, callback) => {
         db.query(
             sqlQuery,
             [
-                garbage_text,
-                garbage_count,
-                compost_text,
-                compost_count,
-                recycling_text,
-                recycling_count,
+                date,
+	    item_1_count,
+	    item_2_count,
+	    item_3_count,
+	    item_4_count,
+		item_5_count,
                 account_id,
             ],
             (err, result) => {
