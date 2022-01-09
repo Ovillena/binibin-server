@@ -99,7 +99,39 @@ router.get('/:startDate/:endDate', jwt.authorize, (req, res) => {
     // });
 });
 
-router.get('/:wasteType/:startDate/:endDate', jwt.authorize, (req, res) => {
+// router.get('/:wasteType/:startDate/:endDate', jwt.authorize, (req, res) => {
+//     console.log('user is logged in', req.user);
+
+//     entryController.getEntriesByDateRangeAndType(req, (err, result) => {
+//         if (err) {
+//             res.send('Error reading from PostgreSQL');
+//             console.log('Error reading from PostgreSQL', err);
+//         } else {
+//             //success
+//             res.json(result.rows);
+
+//             //Output the results of the query to the Heroku Logs
+//             // console.log('getEntriesByDateRangeAndType', result.rows);
+//             console.log(
+//                 'getEntriesByDateRangeAndType',
+//                 req.params.startDate,
+//                 req.params.endDate
+//             );
+//         }
+//     });
+//     // database.connect(function (err, dbConnection) {
+//     //     if (err) {
+//     //         res.status(401).send({ message: 'Error connecting to Postgres' });
+//     //         console.log('Error connecting to PostgreSQL');
+//     //         console.log(err);
+//     //     } else {
+
+//     //         dbConnection.release();
+//     //     }
+//     // });
+// });
+
+router.get('/:itemName/:startDate/:endDate', (req, res) => {
     console.log('user is logged in', req.user);
 
     entryController.getEntriesByDateRangeAndType(req, (err, result) => {
