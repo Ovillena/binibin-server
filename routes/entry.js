@@ -135,7 +135,7 @@ router.get('/:startDate/:endDate', jwt.authorize, (req, res) => {
 router.get('/graphall/:startDate/:endDate', (req, res) => {
     console.log('user is logged in', req.user);
 
-    entryController.getEntriesByDateRangeAndType(req, (err, result) => {
+    entryController.getAllEntriesByDateRange(req, (err, result) => {
         if (err) {
             res.send('Error reading from PostgreSQL');
             console.log('Error reading from PostgreSQL', err);

@@ -74,21 +74,21 @@ const getEntriesByDateRange = (postData, callback) => {
 
 // NEW GET ROUTE: api/entries/graphall/:startDate/:endDate
 // get all data for account for graph page
-const getEntriesByDateRangeAndType = (postData, callback) => {
+const getAllEntriesByDateRange = (postData, callback) => {
     console.log(
         'getEntriesByDateRange',
         postData.params.startDate,
         postData.params.endDate
     );
     let sqlQuery = `SELECT item_name, 
-    TO_CHAR(input_date, 'yy/mm/dd') AS entry_date,
+    TO_CHAR(entry_date, 'yy/mm/dd'),
     SUM(weight_kg) AS total_weight
     FROM entries_new
     JOIN accounts ON accounts.account_id = entries_new.account_id
-    WHERE input_date BETWEEN $1 AND $2
+    WHERE entry_date BETWEEN $1 AND $2
     AND entries_new.account_id = 2
-    GROUP BY input_date, item_name
-    ORDER BY input_date ASC;`;
+    GROUP BY entry_date, item_name
+    ORDER BY entry_date ASC;`;
     console.log(sqlQuery);
     db.query(
         sqlQuery,
@@ -144,55 +144,55 @@ const getEntriesByMonthRangeAndType = (postData, callback) => {
 };
 
 // OOOOOLD GET ROUTE: api/entries/:wasteType/:startDate/:endDate
-// const getEntriesByDateRangeAndType = (postData, callback) => {
-//     let wasteText;
-//     let wasteCount;
-//     switch (postData.params.wasteType) {
-//         case 'garbage':
-//             wasteText = 'garbage_text';
-//             wasteCount = 'garbage_count';
-//             break;
-//         case 'compost':
-//             wasteText = 'compost_text';
-//             wasteCount = 'compost_count';
-//             break;
-//         case 'recycling':
-//             wasteText = 'recycling_text';
-//             wasteCount = 'recycling_count';
-//             break;
-//     }
-//     console.log(
-//         'getEntriesByDateRange',
-//         postData.params.startDate,
-//         postData.params.endDate
-//     );
-//     let sqlQuery = `SELECT EXTRACT (dow FROM entry_date) AS weekday,
-//     TO_CHAR(entry_date, 'mm/dd') AS entry_date,
-//     SUM(${wasteCount}) AS total_items
-//     FROM entries
-//     JOIN accounts ON accounts.account_id = entries.account_id
-//     WHERE entry_date BETWEEN $1 AND $2
-//     AND entries.account_id = $3
-//     GROUP BY entry_date
-//     ORDER BY entry_date ASC;`;
-//     console.log(sqlQuery);
-//     db.query(
-//         sqlQuery,
-//         [
-//             postData.params.startDate,
-//             postData.params.endDate,
-//             postData.user.account_id,
-//         ],
-//         (err, result) => {
-//             if (err) {
-//                 callback(err, null);
-//             }
-//             console.log('_______________________CONTROLLER');
-//             console.log(result);
-//             callback(null, result);
-//         }
-//     );
-// };
+const getEntriesByDateRangeAndType = (postData, callback) => {
+    let wasteText;
+    let wasteCount;
+    switch (postData.params.wasteType) {
+        case 'garbage':
+            wasteText = 'garbage_text';
+            wasteCount = 'garbage_count';
+            break;
+        case 'compost':
+            wasteText = 'compost_text';
+            wasteCount = 'compost_count';
+            break;
+        case 'recycling':
+            wasteText = 'recycling_text';
+            wasteCount = 'recycling_count';
+            break;
+    }
+    console.log(
+        'getEntriesByDateRange',
+        postData.params.startDate,
+        postData.params.endDate
+    );
+    let sqlQuery = `SELECT EXTRACT (dow FROM entry_date) AS weekday,
+    TO_CHAR(entry_date, 'mm/dd') AS entry_date,
+    SUM(${wasteCount}) AS total_items
+    FROM entries
+    JOIN accounts ON accounts.account_id = entries.account_id
+    WHERE entry_date BETWEEN $1 AND $2
+    AND entries.account_id = $3
+    GROUP BY entry_date
+    ORDER BY entry_date ASC;`;
+    console.log(sqlQuery);
+    db.query(
+        sqlQuery,
+        [
+            postData.params.startDate,
+            postData.params.endDate,
+            postData.user.account_id,
+        ],
+        (err, result) => {
+            if (err) {
+                callback(err, null);
+            }
+            console.log('_______________________CONTROLLER');
+            console.log(result);
+            callback(null, result);
+        }
+    );
+};
 
 // // OOOOLD GET ROUTE: api/entries/:wasteType/:startDate/:endDate/month
 // const getEntriesByMonthRangeAndType = (postData, callback) => {
@@ -329,8 +329,9 @@ const getEntriesByDate = (date, callback) => {
 module.exports = {
     getAllEntries,
     getEntriesByDateRange,
-    getEntriesByDateRangeAndType,
+    getAllEntriesByDateRange,
     addEntry,
     getAllItems,
     getEntriesByMonthRangeAndType,
+    getEntriesByDateRangeAndType,
 };
