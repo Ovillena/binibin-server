@@ -86,7 +86,7 @@ const getAllEntriesByDateRange = (postData, callback) => {
     FROM entries_new
     JOIN accounts ON accounts.account_id = entries_new.account_id
     WHERE entry_date BETWEEN $1 AND $2
-    AND entries_new.account_id = 2
+    AND entries_new.account_id = $3
     GROUP BY entry_date, item_name
     ORDER BY entry_date ASC;`;
     console.log(sqlQuery);
@@ -95,7 +95,7 @@ const getAllEntriesByDateRange = (postData, callback) => {
         [
             postData.params.startDate,
             postData.params.endDate,
-            // postData.user.account_id,
+            postData.user.account_id,
         ],
         (err, result) => {
             if (err) {
