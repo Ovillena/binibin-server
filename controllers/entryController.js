@@ -255,6 +255,35 @@ const getEntriesByDate = (date, callback) => {
     );
 };
 
+
+//get total weight by item number by date range
+const getTotalWeightByDateRange = (postData, callback) => {
+    let sqlQuery = `SELECT EXTRACT (dow FROM entry_date) AS weekday, TO_CHAR(entry_date, 'mm/dd') AS entry_date, item_name, SUM(weight_kg) AS weight_total
+        FROM entries_new
+        JOIN accounts ON accounts.account_id = entries_new.account_id
+        WHERE entry_date BETWEEN $1 AND $2
+        AND entries_new.account_id = $3
+        GROUP BY entry_date,
+        item_name
+        ORDER BY entry_date ASC;`
+    db.query(
+        sqlQuery,
+        [
+            postData.params.startDate,
+            postData.params.endDate,
+            postData.user.account_id,
+        ],
+        (err, result) => {
+            if (err) {
+                callback(err, null);
+            }
+            console.log('_______________________CONTROLLER');
+            console.log(result);
+            callback(null, result);
+        }
+    );
+}
+
 module.exports = {
     getAllEntries,
     getEntriesByDateRange,
@@ -262,4 +291,5 @@ module.exports = {
     addEntry,
     getAllItems,
     getEntriesByMonthRangeAndType,
+    getTotalWeightByDateRange
 };
