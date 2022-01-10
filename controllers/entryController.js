@@ -81,7 +81,7 @@ const getAllEntriesByDateRange = (postData, callback) => {
         postData.params.endDate
     );
     let sqlQuery = `SELECT item_name, 
-    TO_CHAR(entry_date, 'yy/mm/dd'),
+    TO_CHAR(entry_date, 'yy/mm/dd') as input_date,
     SUM(weight_kg) AS daily_weight
     FROM entries_new
     JOIN accounts ON accounts.account_id = entries_new.account_id
