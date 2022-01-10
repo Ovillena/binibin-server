@@ -82,7 +82,7 @@ const getAllEntriesByDateRange = (postData, callback) => {
     );
     let sqlQuery = `SELECT item_name, 
     TO_CHAR(entry_date, 'yy/mm/dd'),
-    SUM(weight_kg) AS total_weight
+    SUM(weight_kg) AS daily_weight
     FROM entries_new
     JOIN accounts ON accounts.account_id = entries_new.account_id
     WHERE entry_date BETWEEN $1 AND $2
@@ -119,7 +119,7 @@ const getEntriesByMonthRangeAndType = (postData, callback) => {
     let sqlQuery = `SELECT item_name, TO_CHAR(entry_date, 'yy/mm') as month_entries,
     SUM(weight_kg) AS total_weight
     FROM entries_new
-    JOIN accounts ON accounts.account_id = entries_new.account_id
+    JOIN accounts_new ON accounts_new.account_id = entries_new.account_id
     WHERE input_date BETWEEN $1 AND $2
     AND entries_new.account_id = $3
     GROUP BY month_entries, item_name

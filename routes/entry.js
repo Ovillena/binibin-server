@@ -132,7 +132,7 @@ router.get('/:startDate/:endDate', jwt.authorize, (req, res) => {
 // });
 
 // NEW ENDPOINT FOR GRAPH. GET ALL DATA FOR ACCOUNT
-router.get('/graphall/:startDate/:endDate', (req, res) => {
+router.get('/graphall/:startDate/:endDate', jwt.authorize, (req, res) => {
     console.log('user is logged in', req.user);
 
     entryController.getAllEntriesByDateRange(req, (err, result) => {
