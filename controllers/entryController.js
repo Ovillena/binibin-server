@@ -72,14 +72,15 @@ const getEntriesByDateRange = (postData, callback) => {
     );
 };
 
-// NEW GET ROUTE: api/entries/:itemName/:startDate/:endDate
+// NEW GET ROUTE: api/entries/graphall/:startDate/:endDate
+// get all data for account for graph page
 const getEntriesByDateRangeAndType = (postData, callback) => {
     console.log(
         'getEntriesByDateRange',
         postData.params.startDate,
         postData.params.endDate
     );
-    let sqlQuery = `SELECT item_name, EXTRACT (dow FROM input_date) AS weekday,
+    let sqlQuery = `SELECT item_name, 
     TO_CHAR(input_date, 'yy/mm/dd') AS entry_date,
     SUM(weight_kg) AS total_weight
     FROM entries_new
@@ -107,7 +108,8 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
     );
 };
 
-// NEW Month GET ROUTE: api/entries/:itemName/:startDate/:endDate
+// NEW Month GET ROUTE: api/entries/:startDate/:endDate
+// get all month data for account
 const getEntriesByMonthRangeAndType = (postData, callback) => {
     console.log(
         'getEntriesByDateRange',
