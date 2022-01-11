@@ -271,39 +271,50 @@ const getEntriesByDateRangeAndType = (postData, callback) => {
 const addEntry = (postData, account_id, callback) => {
     console.log(
         '-------addEntry------',
-        postData,
+        postData.items,
         '----------------------kjasdflkawf POST DATA'
     );
-    const {
-        garbage_text,
-        garbage_count,
-        compost_text,
-        compost_count,
-        recycling_text,
-        recycling_count,
-    } = postData;
 
-    let sqlQuery =
-        'INSERT INTO entries (garbage_text, garbage_count, compost_text, compost_count, recycling_text, recycling_count, account_id) VALUES ($1, $2, $3, $4, $5, $6, $7)';
-    if (account_id) {
-        db.query(
-            sqlQuery,
-            [
-                garbage_text,
-                garbage_count,
-                compost_text,
-                compost_count,
-                recycling_text,
-                recycling_count,
-                account_id,
-            ],
-            (err, result) => {
-                if (err) {
-                    callback(err, null);
-                }
-                callback(null, result);
+    const entryValues = [];
+    const values = [];
+
+    for (let i = 0; i < postData.items.length; i++) {
+        let entry = postData.items[i]; 
+        entryValues.push([entry.name, entry.weight, entry.date, account_id]);
+        values.push(entry.name, entry.weight, entry.date, account_id); 
+    }
+  
+    let valuesString = ''; 
+
+    const generateValuesStr = (array) => {
+        for (let i = 0; i < array.length; i++) {
+            let pos1 = 1 + 4 * i; 
+            let pos2 = 2 + 4 * i;
+            let pos3 = 3 + 4 * i;
+            let pos4 = 4 + 4 * i;
+            let string = `($${pos1}, $${pos2}, $${pos3}, $${pos4})`;
+            if (i === 0) {
+                valuesString = string;
+            } else {
+                valuesString = valuesString.concat(', ', string);
             }
-        );
+            console.log(i);
+        }
+    };
+    generateValuesStr(entryValues);
+    console.log(valuesString); 
+
+    const sqlQuery = `INSERT into entries_new
+    (item_name, weight_kg, entry_date, account_id)
+    VALUES ${valuesString}`;
+
+    if (account_id) {
+        db.query(sqlQuery, values, (err, result) => {
+            if (err) {
+                callback(err, null);
+            }
+            callback(null, result);
+        });
     } else {
         callback('missing data', null);
     }
