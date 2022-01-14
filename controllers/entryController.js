@@ -88,7 +88,7 @@ const getAllEntriesByDateRange = (postData, callback) => {
     WHERE entry_date BETWEEN $1 AND $2
     AND entries_new.account_id = $3
     GROUP BY entry_date, item_name
-    ORDER BY entry_date ASC;`;
+    ORDER BY item_name ASC;`;
     console.log(sqlQuery);
     db.query(
         sqlQuery,
@@ -279,16 +279,16 @@ const addEntry = (postData, account_id, callback) => {
     const values = [];
 
     for (let i = 0; i < postData.items.length; i++) {
-        let entry = postData.items[i]; 
+        let entry = postData.items[i];
         entryValues.push([entry.name, entry.weight, entry.date, account_id]);
-        values.push(entry.name, entry.weight, entry.date, account_id); 
+        values.push(entry.name, entry.weight, entry.date, account_id);
     }
-  
-    let valuesString = ''; 
+
+    let valuesString = '';
 
     const generateValuesStr = (array) => {
         for (let i = 0; i < array.length; i++) {
-            let pos1 = 1 + 4 * i; 
+            let pos1 = 1 + 4 * i;
             let pos2 = 2 + 4 * i;
             let pos3 = 3 + 4 * i;
             let pos4 = 4 + 4 * i;
@@ -302,7 +302,7 @@ const addEntry = (postData, account_id, callback) => {
         }
     };
     generateValuesStr(entryValues);
-    console.log(valuesString); 
+    console.log(valuesString);
 
     const sqlQuery = `INSERT into entries_new
     (item_name, weight_kg, entry_date, account_id)
@@ -337,7 +337,6 @@ const getEntriesByDate = (date, callback) => {
     );
 };
 
-
 //get total weight by item number by date range
 const getTotalWeightByDateRange = (postData, callback) => {
     let sqlQuery = `SELECT item_name, SUM(weight_kg) AS weight_total
@@ -345,7 +344,7 @@ const getTotalWeightByDateRange = (postData, callback) => {
     JOIN accounts ON accounts.account_id = entries_new.account_id
     WHERE entry_date BETWEEN $1 AND $2
     AND entries_new.account_id = $3
-    GROUP BY item_name;`
+    GROUP BY item_name;`;
     db.query(
         sqlQuery,
         [
@@ -362,7 +361,7 @@ const getTotalWeightByDateRange = (postData, callback) => {
             callback(null, result);
         }
     );
-}
+};
 
 module.exports = {
     getAllEntries,
@@ -371,5 +370,5 @@ module.exports = {
     addEntry,
     getAllItems,
     getEntriesByMonthRangeAndType,
-    getTotalWeightByDateRange
+    getTotalWeightByDateRange,
 };
