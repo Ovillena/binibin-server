@@ -88,7 +88,7 @@ const getAllEntriesByDateRange = (postData, callback) => {
     WHERE entry_date BETWEEN $1 AND $2
     AND entries_new.account_id = $3
     GROUP BY entry_date, item_name
-    ORDER BY entry_date ASC;`;
+    ORDER BY item_name ASC;`;
     console.log(sqlQuery);
     db.query(
         sqlQuery,
